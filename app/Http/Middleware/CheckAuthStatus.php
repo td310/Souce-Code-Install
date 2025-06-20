@@ -12,11 +12,6 @@ class CheckAuthStatus
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check()) {
-            return redirect()->route('auth.login')
-                ->with('error', 'Vui lòng đăng nhập trước khi vào trang');
-        }
-
         $user = Auth::user();
         switch ($user->status) {
             case AuthStatus::PENDING:

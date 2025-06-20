@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'email' => 'superadmin@khgc.com',
             'password' => bcrypt('Abcd@1234'), 
             'address' => null, 
-            'status' => true,
+            'status' => '0',
             'role' => 'admin',
         ]);
     }
