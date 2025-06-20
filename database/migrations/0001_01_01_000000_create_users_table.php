@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('address')->nullable();
-            $table->enum('status', [0, 1, 2, 3])->default(0);
+            $table->enum('status', ['0', '1', '2', '3'])->default('0');
             $table->enum('role', ['admin', 'user'])->default('user');
             $table->timestamps();
         });
