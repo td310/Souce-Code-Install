@@ -22,8 +22,7 @@ class AuthService
             'first_name'=> $request->input('first_name'),
             'last_name'=> $request->input('last_name'),
             'email'=> $request->input('email'),
-            'password'=> Hash::make($request->input('password')),
-            'status'=> '0'
+            'password'=> Hash::make($request->input('password'))
         ]);
 
         SendWelcomeEmailJob::dispatch($user);
