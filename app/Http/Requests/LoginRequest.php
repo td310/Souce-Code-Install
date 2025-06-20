@@ -46,7 +46,11 @@ class LoginRequest extends FormRequest
             'email.email' => 'Trường :attribute không đúng định dạng.',
             'email.max' => 'Trường :attribute không được vượt quá :max ký tự.',
             'email.exists' => ':attribute không tồn tại trong hệ thống',
+            'email.regex' => 'Trường :attribute phải là địa chỉ email của Gmail.',
+            
             'password.required' => 'Trường :attribute bắt buộc phải nhập.',
+            'password.min' => 'Trường :attribute phải có ít nhất :min ký tự.',
+            'password.regex' => 'Trường :attribute phải chứa ít nhất một ký tự thường, một ký tự hoa, một số, và một ký tự đặc biệt.'
         ];
     }
 }

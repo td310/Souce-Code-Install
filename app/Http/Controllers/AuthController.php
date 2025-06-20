@@ -33,7 +33,7 @@ class AuthController extends Controller
 
     public function register(AuthRequest $request)
     {
-        $result = $this->authService->register($request->validated());
+        $result = $this->authService->register($request);
         if ($result) {
             return redirect()->route('auth.login')
                 ->with('success', 'Đăng ký tài khoản thành công');
@@ -44,8 +44,7 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $credentials = $request->only('email', 'password');
-        $result = $this->authService->loginUser($credentials);
+        $result = $this->authService->loginUser($request);
 
         if ($result) {
             return redirect()->route('post.index')

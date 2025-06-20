@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Jobs\SendWelcomeEmailJob;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class AuthService
 {
@@ -13,17 +14,16 @@ class AuthService
     {
         $user = User::find($userId);
         return "Tên admin: {$user->name}";
-
     }
 
-    public function register(array $data)
+    public function register(Request $request)
     {
         $user = User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'status' => '0'
+            'first_name'=> $request->input('first_name'),
+            'last_name'=> $request->input('last_name'),
+            'email'=> $request->input('email'),
+            'password'=> Hash::make($request->input('password')),
+            'status'=> '0'
         ]);
 
         SendWelcomeEmailJob::dispatch($user);
@@ -31,10 +31,10 @@ class AuthService
         return $user;
     }
 
-    public function loginUser($data)
+    public function loginUser(Request $request)
     {
-        $email = $data['email'];
-        $password = $data['password'];
+        $email = $request->input('email');
+        $password = $request->input('password');
 
         return Auth::attempt(['email' => $email, 'password' => $password]);
     }
