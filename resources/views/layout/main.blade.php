@@ -48,8 +48,6 @@
     <!-- Bootstrap 4 -->
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="{{ asset('vendor/dist/js/demo.js') }}"></script>
     <!-- Page specific script -->
     <script>
         $(function() {
