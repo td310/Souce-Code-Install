@@ -12,12 +12,8 @@ class AuthService
     public function getUserName($userId): string
     {
         $user = User::find($userId);
+        return "Tên admin: {$user->name}";
 
-        if ($user) {
-            return "Tên admin: {$user->name}";
-        }
-
-        return "User not found";
     }
 
     public function register(array $data)
