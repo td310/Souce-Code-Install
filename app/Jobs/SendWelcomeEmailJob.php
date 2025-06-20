@@ -13,7 +13,7 @@ use App\Mail\WelcomeEmail;
 
 class SendWelcomeEmailJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, SerializesModels;
 
     protected $user;
 
