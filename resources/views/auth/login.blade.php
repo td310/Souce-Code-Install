@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
     <title>AdminLTE 3 | Login Page</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -22,12 +23,15 @@
 
         <div class="card">
             <div class="card-body login-card-body">
+                @if (session('login_error'))
+                    <p class="text-danger text-center mb-3">{{ session('login_error') }}</p>
+                @endif
                 <p class="login-box-msg">Sign in to start your session</p>
 
                 <form method="POST" action="{{ route('auth.login.post') }}">
                     @csrf
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email"
+                        <input type="text" class="form-control @error('email') is-invalid @enderror" name="email"
                             placeholder="Email" value="{{ old('email') }}">
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -74,16 +78,10 @@
             </div>
         </div>
     </div>
-    </div>
     <!-- /.register-box -->
     @if (session('success'))
         <script>
             alert('{{ session('success') }}');
-        </script>
-    @endif
-    @if (session('error'))
-        <script>
-            alert('{{ session('error') }}');
         </script>
     @endif
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>

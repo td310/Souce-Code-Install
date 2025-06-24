@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Enums\AuthStatus;
+use App\Enums\AuthRole;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -14,13 +16,13 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'first_name' => 'Admin',
-            'last_name' => 'Super',
-            'email' => 'superadmin@khgc.com',
-            'password' => bcrypt('Abcd@1234'), 
+            'first_name' => 'Super',
+            'last_name' => 'Admin',
+            'email' => 'superadmin02@khgc.com',
+            'password' => Hash::make('Abcd@1234'), 
             'address' => null, 
-            'status' => '0',
-            'role' => 'admin',
+            'status' => AuthStatus::PENDING->value,
+            'role' => AuthRole::ADMIN->value,
         ]);
     }
 }

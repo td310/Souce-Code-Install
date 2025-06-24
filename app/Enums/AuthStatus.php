@@ -1,10 +1,20 @@
 <?php
 namespace App\Enums;
 
-class AuthStatus
+enum AuthStatus: int
 {
-    const PENDING = '0';
-    const APPROVED = '1';
-    const REJECTED = '2';
-    const LOCKED = '3';
+    case PENDING = 0;
+    case APPROVED = 1;
+    case REJECTED = 2;
+    case LOCKED = 3;
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::PENDING => 'Chờ phê duyệt',
+            self::APPROVED => 'Được phê duyệt',
+            self::REJECTED => 'Bị từ chối',
+            self::LOCKED => 'Bị khóa',
+        };
+    }
 }

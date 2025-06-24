@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Hash;
 use App\Jobs\SendWelcomeEmailJob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Enums\AuthStatus;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
 class AuthService
 {
@@ -18,16 +22,25 @@ class AuthService
 
     public function register(Request $request)
     {
-        $user = User::create([
-            'first_name'=> $request->input('first_name'),
-            'last_name'=> $request->input('last_name'),
-            'email'=> $request->input('email'),
-            'password'=> Hash::make($request->input('password'))
-        ]);
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+                'status' => AuthStatus::PENDING
+            ]);
 
-        SendWelcomeEmailJob::dispatch($user);
+            SendWelcomeEmailJob::dispatch($user);
 
-        return $user;
+            return $user;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Đăng ký thất bại: ' . $e->getMessage());
+
+            return false;
+        }
     }
 
     public function loginUser(Request $request)

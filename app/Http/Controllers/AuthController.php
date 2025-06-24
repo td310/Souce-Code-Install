@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\AuthService;
-use App\Http\Requests\AuthRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginRequest;
 
 
@@ -31,26 +31,21 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function register(AuthRequest $request)
+    public function register(RegisterRequest $request)
     {
-        $result = $this->authService->register($request);
-        if ($result) {
-            return redirect()->route('auth.login')
-                ->with('success', 'Đăng ký tài khoản thành công');
-        }
-        return redirect()->route('auth.login')
-            ->with('error', 'Đăng ký tài khoản thất bại');
+        $result = $this->authService->register($request->validated());
+
+        return $result
+            ? to_route('auth.login')->with('success', 'Đăng ký tài khoản thành công')
+            : to_route('auth.login')->with('error', 'Đăng ký tài khoản thất bại');
     }
 
     public function login(LoginRequest $request)
     {
-        $result = $this->authService->loginUser($request);
+        $result = $this->authService->loginUser($request->validated());
 
-        if ($result) {
-            return redirect()->route('post.index')
-                ->with('success', 'Đăng nhập thành công');
-        }
-        return redirect()->route('auth.login')
-            ->with('error', 'Đăng nhập thất bại');
+        return $result
+            ? to_route('post.index')->with('success', 'Đăng nhập thành công')
+            : to_route('auth.login')->with('error', 'Đăng nhập thất bại');
     }
 }

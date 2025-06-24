@@ -2,21 +2,27 @@
 @section('contents')
     <section class="content">
         <div class="container-fluid">
-            <style>
-                h2 {
-                    color: rgb(224, 224, 7);
-                    background: white;
-                    padding: 10px;
-                    text-align: center;
-                    top:40%;
-                    position: absolute;
-                    left: 50%;
-                }
-            </style>
-
-            <div class="text-center">
-                <h2>Nguyễn Đức Tài</h2>
-            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($users as $user)
+                        <tr>
+                            <td>{{ $user->id }}</td>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->status_label }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <p>{{ $users->first()->id }} | {{ $users->first()->name }} | {{ $users->first()->status_label }}</p>
+            <p>{{ $users->last()->id }} | {{ $users->last()->name }} | {{ $users->last()->status_label }}</p>
+            <p>{{ $topUser->id }} | {{ $topUser->name }} | {{  $topUser->status_label }}</p>
         </div>
     </section>
 @endsection

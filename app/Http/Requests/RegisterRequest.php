@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
-class AuthRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,17 +28,26 @@ class AuthRequest extends FormRequest
             'email' => [
                 'required',
                 'string',
-                'email',
+                'email:rfc,dns',
                 'max:100',
                 'unique:users',
-                'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i',
             ],
             'password' => [
                 'required',
-                'string',
-                'min:8',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
-            ]
+                Password::min(8)
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+            ],
+            'password_confirmation' => [
+                'required',
+                Password::min(8)
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols(),
+                'same:password',
+                
+            ],
         ];
     }
 
@@ -51,14 +61,30 @@ class AuthRequest extends FormRequest
             'last_name.max' => 'Trường :attribute không được vượt quá :max ký tự.',
 
             'email.required' => 'Trường :attribute bắt buộc phải nhập.',
-            'email.email' => 'Trường :attribute không đúng định dạng email.',
             'email.max' => 'Trường :attribute không được vượt quá :max ký tự.',
+            'email.email' => 'Trường :attribute không đúng định dạng email.',
             'email.unique' => 'Trường :attribute đã tồn tại trong hệ thống.',
-            'email.regex' => 'Trường :attribute phải là địa chỉ email của Gmail.',
 
             'password.required' => 'Trường :attribute bắt buộc phải nhập.',
             'password.min' => 'Trường :attribute phải có ít nhất :min ký tự.',
-            'password.regex' => 'Trường :attribute phải chứa ít nhất một ký tự thường, một ký tự hoa, một số, và một ký tự đặc biệt.'
+            'password.mixed' => 'Trường :attribute phải chứa ít nhất một chữ hoa và một chữ thường.',
+            'password.numbers' => 'Trường :attribute phải chứa ít nhất một số.',
+            'password.symbols' => 'Trường :attribute phải chứa ít nhất một ký tự đặc biệt.',
+
+            'password_confirmation.required' => 'Trường xác nhận :attribute bắt buộc phải nhập.',
+            'password_confirmation.min' => 'Trường xác nhận :attribute phải có ít nhất :min ký tự.',
+            'password_confirmation.same' => 'Xác nhận :attribute không khớp với mật khẩu đã nhập.'
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'first_name' => 'tên',
+            'last_name' => 'họ',
+            'email' => 'email',
+            'password' => 'mật khẩu',
+            'password_confirmation' => 'xác nhận mật khẩu'
         ];
     }
 }

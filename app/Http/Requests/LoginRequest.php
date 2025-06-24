@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
 class LoginRequest extends FormRequest
 {
@@ -24,17 +25,16 @@ class LoginRequest extends FormRequest
         return [
             'email' => [
                 'required',
-                'string',
-                'email',
                 'max:100',
-                'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i',
+                'email:rfc,dns',
                 'exists:users,email'
             ],
             'password' => [
                 'required',
-                'string',
-                'min:8',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
+                Password::min(8)
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
             ]
         ];
     }
@@ -43,14 +43,23 @@ class LoginRequest extends FormRequest
     {
         return [
             'email.required' => 'Trường :attribute bắt buộc phải nhập.',
-            'email.email' => 'Trường :attribute không đúng định dạng.',
             'email.max' => 'Trường :attribute không được vượt quá :max ký tự.',
-            'email.exists' => ':attribute không tồn tại trong hệ thống',
-            'email.regex' => 'Trường :attribute phải là địa chỉ email của Gmail.',
-            
+            'email.email' => 'Địa chỉ email không hợp lệ hoặc domain không tồn tại.',
+            'email.exists' => ':attribute không tồn tại trong hệ thống.',
+
             'password.required' => 'Trường :attribute bắt buộc phải nhập.',
             'password.min' => 'Trường :attribute phải có ít nhất :min ký tự.',
-            'password.regex' => 'Trường :attribute phải chứa ít nhất một ký tự thường, một ký tự hoa, một số, và một ký tự đặc biệt.'
+            'password.mixed' => 'Trường :attribute phải chứa ít nhất một chữ hoa và một chữ thường.',
+            'password.numbers' => 'Trường :attribute phải chứa ít nhất một số.',
+            'password.symbols' => 'Trường :attribute phải chứa ít nhất một ký tự đặc biệt.'
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'email' => 'Email',
+            'password' => 'Mật khẩu'
         ];
     }
 }
