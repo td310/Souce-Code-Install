@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
-class RegisterRequest extends FormRequest
+class ResetPassRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,15 +23,6 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|string|max:30',
-            'last_name' => 'required|string|max:30',
-            'email' => [
-                'required',
-                'string',
-                'email:rfc,dns',
-                'max:100',
-                'unique:users',
-            ],
             'password' => [
                 'required',
                 'confirmed',
@@ -53,17 +44,6 @@ class RegisterRequest extends FormRequest
     public function messages()
     {
         return [
-            'first_name.required' => 'Trường :attribute bắt buộc phải nhập.',
-            'first_name.max' => 'Trường :attribute không được vượt quá :max ký tự.',
-
-            'last_name.required' => 'Trường :attribute bắt buộc phải nhập.',
-            'last_name.max' => 'Trường :attribute không được vượt quá :max ký tự.',
-
-            'email.required' => 'Trường :attribute bắt buộc phải nhập.',
-            'email.max' => 'Trường :attribute không được vượt quá :max ký tự.',
-            'email.email' => 'Trường :attribute không đúng định dạng email.',
-            'email.unique' => 'Trường :attribute đã tồn tại trong hệ thống.',
-
             'password.required' => 'Trường :attribute bắt buộc phải nhập.',
             'password.confirmed' => 'Trường xác nhận :attribute không khớp với mật khẩu đã nhập.',
             'password.min' => 'Trường :attribute phải có ít nhất :min ký tự.',
@@ -79,9 +59,6 @@ class RegisterRequest extends FormRequest
     public function attributes()
     {
         return [
-            'first_name' => 'tên',
-            'last_name' => 'họ',
-            'email' => 'email',
             'password' => 'mật khẩu',
             'password_confirmation' => 'xác nhận mật khẩu'
         ];

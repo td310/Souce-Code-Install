@@ -26,6 +26,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
     protected function casts(): array
     {
         return [
@@ -37,7 +38,7 @@ class User extends Authenticatable
 
     protected $appends = ['status_label', 'name'];
 
-    public function getNameHumanAttribute(): string
+    public function getNameAttribute(): string
     {
         return $this->first_name . ' ' . $this->last_name;
     }

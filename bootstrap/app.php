@@ -15,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'check.user.status' => CheckAuthStatus::class,
-            'check.login' => CheckLogin::class,
+            'check.login' => CheckLogin::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -23,42 +23,47 @@
 
         <div class="card">
             <div class="card-body login-card-body">
-                @if (session('login_error'))
-                    <p class="text-danger text-center mb-3">{{ session('login_error') }}</p>
-                @endif
                 <p class="login-box-msg">Sign in to start your session</p>
 
                 <form method="POST" action="{{ route('auth.login.post') }}">
                     @csrf
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control @error('email') is-invalid @enderror" name="email"
-                            placeholder="Email" value="{{ old('email') }}">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                    <div class="form-group">
+                        <label for="email">Email <span class="text-danger">*</span></label>
+                        <div class="input-group mb-3">
+                            <input type="text" id="email"
+                                class="form-control @error('email') is-invalid @enderror" name="email"
+                                placeholder="Email" value="{{ old('email') }}">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope"></span>
+                                </div>
                             </div>
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
 
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control @error('password') is-invalid @enderror"
-                            name="password" placeholder="Password">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
+                    <div class="form-group">
+                        <label for="password">Password <span class="text-danger">*</span></label>
+                        <div class="input-group mb-3">
+                            <input type="password" id="password"
+                                class="form-control @error('password') is-invalid @enderror" name="password"
+                                placeholder="Password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
                             </div>
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-8">
-                            <a href="#" class="text-primary">Forgot Password?</a>
+                            <a href="{{ route('auth.forgot-password') }}" class="text-primary">Forgot Password?</a>
                         </div>
                     </div>
 
@@ -82,6 +87,12 @@
     @if (session('success'))
         <script>
             alert('{{ session('success') }}');
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            alert('{{ session('error') }}');
         </script>
     @endif
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>

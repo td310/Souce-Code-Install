@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('password');
             $table->string('address')->nullable();
-            $table->enum('status', ['0', '1', '2', '3'])->default('0');
-            $table->enum('role', ['admin', 'user'])->default('user');
+            $table->integer('status')->default('0');
+            $table->integer('role')->default('user');
             $table->timestamps();
         });
 
