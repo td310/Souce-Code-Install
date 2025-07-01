@@ -1,10 +1,10 @@
 <?php
 namespace App\Enums;
 
-enum AuthRole: int
+enum AuthRole: string
 {
-    case ADMIN = 0;
-    case USER = 1;
+    case ADMIN = 'admin';
+    case USER = 'user';
 
     public function label(): string
     {

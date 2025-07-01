@@ -22,20 +22,39 @@
             <div class="card-body login-card-body">
                 <p class="login-box-msg">You forgot your password? Here you can easily retrieve a new password.</p>
 
-                <form method="POST" action="{{ route('auth.forgot-password.post') }}">
+                <form method="POST" action="{{ route('auth.reset_password.post') }}">
+                    <input type="hidden" name="token" value="{{ $token }}">
                     @csrf
                     <div class="form-group">
-                        <label for="email">Email <span class="text-danger">*</span></label>
+                        <label for="password">Password <span class="text-danger">*</span></label>
                         <div class="input-group mb-3">
-                            <input type="email" id="email"
-                                class="form-control @error('email') is-invalid @enderror" name="email"
-                                placeholder="Email" value="{{ old('email') }}">
+                            <input type="password" id="password"
+                                class="form-control @error('password') is-invalid @enderror" name="password"
+                                placeholder="Password">
                             <div class="input-group-append">
                                 <div class="input-group-text">
-                                    <span class="fas fa-envelope"></span>
+                                    <span class="fas fa-lock"></span>
                                 </div>
                             </div>
-                            @error('email')
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password_confirmation">Password Confirmation <span
+                                class="text-danger">*</span></label>
+                        <div class="input-group mb-3">
+                            <input type="password" id="password_confirmation"
+                                class="form-control @error('password_confirmation') is-invalid @enderror"
+                                name="password_confirmation" placeholder="Confirm Password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                            @error('password_confirmation')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -44,34 +63,15 @@
                     <div class="row mb-3">
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary btn-block">
-                                <i class="fas fa-paper-plane mr-2"></i>Request new password
+                                <i class="fas fa-paper-plane mr-2"></i>Reset Password
                             </button>
                         </div>
                     </div>
                 </form>
-
-                <div class="text-center mt-4">
-                    <a href="{{ route('auth.login') }}" class="btn btn-outline-primary btn-block">
-                        <i class="fas fa-sign-in-alt mr-2"></i>Back to login
-                    </a>
-                    <a href="{{ route('auth.register') }}" class="btn btn-outline-primary btn-block">
-                        <i class="fas fa-user-plus mr-2"></i>Register a new membership
-                    </a>
-                </div>
             </div>
         </div>
     </div>
-    @if (session('success'))
-        <script>
-            alert('{{ session('success') }}');
-        </script>
-    @endif
 
-    @if (session('error'))
-        <script>
-            alert('{{ session('error') }}');
-        </script>
-    @endif
     <script src="https://adminlte.io/themes/v3/plugins/jquery/jquery.min.js"></script>
     <script src="https://adminlte.io/themes/v3/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://adminlte.io/themes/v3/dist/js/adminlte.min.js"></script>

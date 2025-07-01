@@ -21,8 +21,8 @@ class UserSeeder extends Seeder
             'email' => 'superadmin02@khgc.com',
             'password' => Hash::make('Abcd@1234'), 
             'address' => null, 
-            'status' => AuthStatus::PENDING->value,
-            'role' => AuthRole::ADMIN->value,
+            'status' => AuthStatus::PENDING,
+            'role' => AuthRole::ADMIN,
         ]);
     }
 }

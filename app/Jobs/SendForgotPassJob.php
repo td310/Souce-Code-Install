@@ -16,18 +16,12 @@ class SendForgotPassJob implements ShouldQueue
     protected $user;
     protected $token;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(User $user, string $token)
     {
         $this->user = $user;
         $this->token = $token;
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
         Mail::to($this->user->email)->send(new ForgotPassMail($this->user, $this->token));

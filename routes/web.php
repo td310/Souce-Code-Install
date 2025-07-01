@@ -4,7 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CommentController;
 
+//Demo XSS
+Route::get('/comments', [CommentController::class, 'index']);
+Route::post('/comments', [CommentController::class, 'store']);
+
+#---------------------------------#
 Route::get('/home', [HomeController::class, 'index']);
 
 Route::get('/', function () {
@@ -21,14 +27,21 @@ Route::group(['prefix' => 'auth', 'middleware' => 'check.login'], function () {
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login.post');
 
     //Quên mật khẩu
-    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('auth.forgot-password');
-    Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('auth.forgot-password.post');
-    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('auth.reset-password.post');
+    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('auth.forgot_password');
+    Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('auth.forgot_password.post');
+
+    //Reset mật khẩu mới
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('auth.reset_password.post');
+});
+
+Route::middleware(['check.user.status'])->group(function () {
+    Route::delete('/post/delete-all', [PostController::class, 'deleteAll'])->name('post.delete_all');
+    Route::resource('post', PostController::class);
+
+    //Cập nhật hồ sơ
+    Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile.show');
+    Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
-Route::get('/auth/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('auth.reset-password.show');
-
-Route::middleware(['check.user.status'])->group(function () {
-    Route::get('/post', [PostController::class, 'index'])->name('post.index');
-});
+Route::get('/auth/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('auth.reset_password.show');

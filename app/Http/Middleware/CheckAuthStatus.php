@@ -17,26 +17,26 @@ class CheckAuthStatus
             switch ($user->status) {
                 case AuthStatus::PENDING:
                     Auth::logout();
-                    return redirect()->route('auth.login')
+                    return to_route('auth.login')
                         ->with('error', 'Tài khoản của bạn đang chờ xác nhận.');
 
                 case AuthStatus::REJECTED:
                     Auth::logout();
-                    return redirect()->route('auth.login')
+                    return to_route('auth.login')
                         ->with('error', 'Tài khoản của bạn đã bị từ chối');
 
                 case AuthStatus::LOCKED:
                     Auth::logout();
-                    return redirect()->route('auth.login')
+                    return to_route('auth.login')
                         ->with('error', 'Tài khoản của bạn đã bị khóa');
 
                 case AuthStatus::APPROVED:
                     return $next($request);
+
+                default:
+                    return to_route('auth.login')->with('error', 'Tài khoản của bạn không hợp lệ'); 
             }
         }
-
-        Auth::logout();
-        return redirect()->route('auth.login')
-            ->with('error', 'Trạng thái tài khoản không hợp lệ');
+        return to_route('auth.login')->with('error', 'Vui lòng đăng nhập để tiếp tục');
     }
 }

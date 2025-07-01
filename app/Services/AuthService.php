@@ -15,18 +15,12 @@ use Illuminate\Support\Str;
 
 class AuthService
 {
-    public function register(Request $request)
+    public function register(array $data)
     {
         DB::beginTransaction();
         try {
-            $user = User::create([
-                'first_name' => $request->input('first_name'),
-                'last_name' => $request->input('last_name'),
-                'email' => $request->input('email'),
-                'password' => Hash::make($request->input('password')),
-                'status' => AuthStatus::PENDING
-            ]);
-
+            $data['password'] = Hash::make($data['password']);
+            $user = User::create($data);
             SendWelcomeEmailJob::dispatch($user);
             DB::commit();
             return $user;
@@ -39,13 +33,15 @@ class AuthService
 
     public function loginUser(array $credentials)
     {
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
+        $user = User::where('email', $credentials['email'])->first();
+        if ($user) {
             if ($user->status === AuthStatus::APPROVED) {
-                return true;
+                if (Auth::attempt($credentials)) {
+                    return true;
+                }
+            } else {
+                session()->flash('status_error', $user->status_label);
             }
-            Auth::logout();
-            return false;
         }
         return false;
     }
@@ -103,6 +99,26 @@ class AuthService
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Reset password failed: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function updateProfile(array $data)
+    {
+        DB::beginTransaction();
+        try {
+            $user = Auth::user();
+            $user->update([
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'address' => $data['address']
+            ]);
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Cập nhật hồ sơ thất bại: ' . $e->getMessage());
             return false;
         }
     }

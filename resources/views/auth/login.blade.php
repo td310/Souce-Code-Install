@@ -24,7 +24,11 @@
         <div class="card">
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
-
+                @if (session('status_error'))
+                    <p class="text-danger">
+                        Tài khoản của bạn đang ở trạng thái: <b>{{ session('status_error') }}</b>
+                    </p>
+                @endif
                 <form method="POST" action="{{ route('auth.login.post') }}">
                     @csrf
                     <div class="form-group">
@@ -63,7 +67,7 @@
 
                     <div class="row mb-3">
                         <div class="col-8">
-                            <a href="{{ route('auth.forgot-password') }}" class="text-primary">Forgot Password?</a>
+                            <a href="{{ route('auth.forgot_password') }}" class="text-primary">Forgot Password?</a>
                         </div>
                     </div>
 
