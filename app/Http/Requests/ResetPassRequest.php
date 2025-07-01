@@ -24,11 +24,7 @@ class ResetPassRequest extends FormRequest
                     ->symbols()
             ],
             'password_confirmation' => [
-                'required',
-                Password::min(8)
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
+                'required'
             ],
         ];
     }
@@ -43,8 +39,7 @@ class ResetPassRequest extends FormRequest
             'password.numbers' => 'Trường :attribute phải chứa ít nhất một số.',
             'password.symbols' => 'Trường :attribute phải chứa ít nhất một ký tự đặc biệt.',
 
-            'password_confirmation.required' => 'Trường xác nhận :attribute bắt buộc phải nhập.',
-            'password_confirmation.min' => 'Trường xác nhận :attribute phải có ít nhất :min ký tự.'
+            'password_confirmation.required' => 'Trường xác nhận :attribute bắt buộc phải nhập.'
         ];
     }
 
