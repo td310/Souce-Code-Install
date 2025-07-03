@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Services\PostService;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
-use Illuminate\Support\Facades\Auth;
+use App\Enums\PostStatus;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\DataTables\PostDataTable;
 
 class PostController extends Controller
 {
@@ -18,10 +19,20 @@ class PostController extends Controller
         $this->postService = $postService;
     }
 
-    public function index()
+    public function index(PostDataTable $dataTable)
     {
-        $posts = Post::with('user')->where('user_id', Auth::id())->latest()->paginate(10);
-        return view('post.index', compact('posts'));
+        return $dataTable->render('post.index');
+    }
+
+    public function news()
+    {
+        $post = Post::where('status', PostStatus::APPROVE)->latest()->get();
+        return view('post.news', compact('post'));
+    }
+
+    public function newsDetail(Post $post)
+    {
+        return view('post.news_detail', compact('post'));
     }
 
     public function create()
@@ -41,7 +52,7 @@ class PostController extends Controller
         $this->authorize('update', $post);
         return view('post.show', compact('post'));
     }
-    
+
     public function edit(Post $post)
     {
         $this->authorize('update', $post);

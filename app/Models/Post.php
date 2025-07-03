@@ -17,7 +17,7 @@ class Post extends Model implements HasMedia
         'title',
         'slug',
         'description',
-        'content',
+        'content', 
         'publish_date',
         'status',
         'user_id'
@@ -28,6 +28,13 @@ class Post extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
+    protected function casts(): array
+    {
+        return [
+            'status' => PostStatus::class
+        ];
+    }
+
     public function getThumbnailAttribute()
     {
         $media = $this->getFirstMedia('thumbnail');
@@ -36,7 +43,7 @@ class Post extends Model implements HasMedia
 
     public function getStatusLabelAttribute()
     {
-        return PostStatus::from($this->status)->label();
+        return $this->status;
     }
 
     public function registerMediaCollections(): void

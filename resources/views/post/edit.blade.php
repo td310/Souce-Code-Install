@@ -27,21 +27,6 @@
 
                                     <div class="form-group">
                                         <div class="row align-items-center mb-2">
-                                            <label class="col-sm-3 col-form-label">Slug <span
-                                                    class="text-danger">*</span></label>
-                                            <div class="col-sm-9">
-                                                <input type="text"
-                                                    class="form-control @error('slug') is-invalid @enderror" name="slug"
-                                                    id="slug" value="{{ $post->slug }}">
-                                                @error('slug')
-                                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="row align-items-center mb-2">
                                             <label class="col-sm-3 col-form-label">Nội dung <span
                                                     class="text-danger">*</span></label>
                                             <div class="col-sm-9">

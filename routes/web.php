@@ -17,7 +17,7 @@ Route::get('/', function () {
     return redirect()->route('auth.login');
 });
 
-Route::group(['prefix' => 'auth', 'middleware' => 'check.login'], function () {
+Route::group(['prefix' => 'auth', 'middleware' => 'guest'], function () {
     // Form đăng ký
     Route::get('/register', [AuthController::class, 'showRegister'])->name('auth.register');
     Route::post('/register', [AuthController::class, 'register'])->name('auth.register.post');
@@ -38,10 +38,13 @@ Route::middleware(['check.user.status'])->group(function () {
     Route::delete('/post/delete-all', [PostController::class, 'deleteAll'])->name('post.delete_all');
     Route::resource('post', PostController::class);
 
+    //Tin tức
+    Route::get('/news', [PostController::class, 'news'])->name('post.news');
+    Route::get('/news/{post:slug}', [PostController::class, 'newsDetail'])->name('post.news_detail');
+
     //Cập nhật hồ sơ
     Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile.show');
     Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
 });
-
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::get('/auth/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('auth.reset_password.show');

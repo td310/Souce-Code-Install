@@ -14,14 +14,7 @@ class PostService
     {
         DB::beginTransaction();
         try {
-            $data['slug'] = Str::slug($data['slug']);
-
-            $originalSlug = $data['slug'];
-            $count = 1;
-            while (Post::where('slug', $data['slug'])->exists()) {
-                $data['slug'] = $originalSlug . '-' . $count++;
-            }
-
+            Log::info('data service: ', $data);
             $data['user_id'] = Auth::id();
 
             $post = Post::create($data);
@@ -43,14 +36,6 @@ class PostService
     {
         DB::beginTransaction();
         try {
-            $data['slug'] = Str::slug($data['title']);
-            
-            $originalSlug = $data['slug'];
-            $count = 1;
-            while (Post::where('slug', $data['slug'])->where('id', '!=', $post->id)->exists()) {
-                $data['slug'] = $originalSlug . '-' . $count++;
-            }
-
             $post->update($data);
 
             if (!empty($data['file'])) {
@@ -85,7 +70,7 @@ class PostService
     {
         DB::beginTransaction();
         try {
-            Post::where('user_id', Auth::id())->delete();
+            Auth::user()->posts->delete();
             DB::commit();
             return true;
         } catch (\Exception $e) {

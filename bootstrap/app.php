@@ -4,8 +4,6 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\CheckAuthStatus;
-use App\Http\Middleware\CheckLogin;
-use App\Http\Middleware\UserPostAccess;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -16,8 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'check.user.status' => CheckAuthStatus::class,
-            'check.login' => CheckLogin::class
         ]);
+        $middleware->redirectUsersTo('/post');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

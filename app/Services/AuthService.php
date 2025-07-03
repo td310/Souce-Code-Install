@@ -34,17 +34,19 @@ class AuthService
     public function loginUser(array $credentials)
     {
         $user = User::where('email', $credentials['email'])->first();
-        if ($user) {
-            if ($user->status === AuthStatus::APPROVED) {
-                if (Auth::attempt($credentials)) {
-                    return true;
-                }
-            } else {
-                session()->flash('status_error', $user->status_label);
-            }
+    
+        if ($user->status !== AuthStatus::APPROVED) {
+            session()->flash('status_error', $user->status_label);
+            return false;
         }
+    
+        if (Auth::attempt($credentials)) {
+            return true;
+        }
+    
         return false;
     }
+    
 
     public function forgotPassword(string $email)
     {

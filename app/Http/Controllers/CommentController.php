@@ -18,19 +18,19 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         // Cách 1
-        // $config = HTMLPurifier_Config::createDefault();
-        // $config->set('HTML.Allowed', 'p,br,strong,em,a[href]');
-        // $config->set('HTML.ForbiddenAttributes', ['on*']); 
-        // $config->set('URI.DisableExternalResources', true); 
-        // $config->set('URI.AllowedSchemes', ['http', 'https']); 
-        // $purifier = new HTMLPurifier($config);
-        // $cleanContent = $purifier->purify($request->content);
+        $config = HTMLPurifier_Config::createDefault();
+        $config->set('HTML.Allowed', 'p,br,strong,em,a[href]');
+        $config->set('HTML.ForbiddenAttributes', ['on*']); 
+        $config->set('URI.DisableExternalResources', true); 
+        $config->set('URI.AllowedSchemes', ['http', 'https']); 
+        $purifier = new HTMLPurifier($config);
+        $cleanContent = $purifier->purify($request->content);
 
         //Cách 2
-        //$safeContent = strip_tags($request->content, '<p><b><i><u><strong><em><br>');
+        // $safeContent = strip_tags($request->content, '<p><b><i><u><strong><em><br>');
 
         Comment::create([
-            'content' => $request->content,
+            'content' => $cleanContent,
         ]);
 
         return redirect('/comments');

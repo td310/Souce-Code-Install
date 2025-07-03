@@ -38,14 +38,14 @@ class User extends Authenticatable
 
     protected $appends = ['status_label', 'name'];
 
-    public function getNameAttribute(): string
+    public function getNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;
     }
 
-    public function getStatusLabelAttribute(): string
+    public function getStatusLabelAttribute()
     {
-        return $this->status->label();
+        return $this->status;
     }
 
     public function posts()

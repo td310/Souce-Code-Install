@@ -15,7 +15,6 @@ class PostRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:100',
-            'slug' => 'required|string|max:100',
             'description'  => 'nullable|string|max:200',
             'content' => 'required|string',
             'publish_date' => 'nullable|date',
@@ -31,9 +30,6 @@ class PostRequest extends FormRequest
 
             'description.max'       => 'Trường :attribute không được vượt quá :max ký tự.',
 
-            'slug.required' => 'Trường :attribute bắt buộc phải nhập.',
-            'slug.max' => 'Trường :attribute không được vượt quá :max ký tự.',
-
             'content.required' => 'Trường :attribute bắt buộc phải nhập.',
 
             'publish_date.date'     => 'Trường :attribute phải là định dạng ngày giờ hợp lệ.',
@@ -48,7 +44,6 @@ class PostRequest extends FormRequest
     {
         return [
             'title' => 'tiêu đề',
-            'slug' => 'đường dẫn tĩnh',
             'description'  => 'mô tả ngắn',
             'content' => 'nội dung bài viết',
             'publish_date' => 'ngày xuất bản',
