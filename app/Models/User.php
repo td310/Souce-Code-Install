@@ -43,9 +43,9 @@ class User extends Authenticatable
         return $this->first_name . ' ' . $this->last_name;
     }
 
-    public function getStatusLabelAttribute()
+    public function getStatusLabelAttribute(): string
     {
-        return $this->status;
+        return $this->status->label();
     }
 
     public function posts()

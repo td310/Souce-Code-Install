@@ -41,9 +41,9 @@ class Post extends Model implements HasMedia
         return $media ? $media->getUrl() : null;
     }
 
-    public function getStatusLabelAttribute()
+    public function getStatusLabelAttribute(): string
     {
-        return $this->status;
+        return $this->status->label();
     }
 
     public function registerMediaCollections(): void

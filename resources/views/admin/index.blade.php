@@ -13,7 +13,7 @@
                     <form id="deleteAllForm" action="{{ route('post.delete_all') }}" method="POST" class="float-right mr-2">
                         @csrf
                         @method('DELETE')
-                        <button type="button" class="btn btn-danger" onclick="confirmDeleteAll('deleteAllForm')">
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete('deleteAllForm')">
                             <i class="fas fa-trash-alt"></i> Xóa tất cả
                         </button>
                     </form>
@@ -27,19 +27,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <table id="postsTable" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Hình ảnh</th>
-                                        <th>Tiêu đề</th>
-                                        <th>Mô tả</th>
-                                        <th>Ngày xuất bản</th>
-                                        <th>Trạng thái</th>
-                                        <th>Hành động</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                            {{ $dataTable->table() }}
                         </div>
                     </div>
                 </div>
@@ -48,5 +36,5 @@
     </section>
 @endsection
 @push('scripts')
-    <script src="{{ asset('vendor/datatables/post-datatable.js') }}"></script>
+    {{ $dataTable->scripts() }}
 @endpush

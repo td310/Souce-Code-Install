@@ -7,7 +7,7 @@ use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use App\Enums\PostStatus;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use App\DataTables\PostDataTable;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -19,9 +19,14 @@ class PostController extends Controller
         $this->postService = $postService;
     }
 
-    public function index(PostDataTable $dataTable)
+    public function index()
     {
-        return $dataTable->render('post.index');
+        return view('post.index');
+    }
+
+    public function data(Request $request)
+    {
+        return response()->json($this->postService->getDataTableData($request));
     }
 
     public function news()
@@ -68,15 +73,19 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        return $this->postService->deletePost($post)
-            ? to_route('post.index')->with('success', 'Xoá bài viết thành công')
-            : to_route('post.index')->with('error', 'Xoá bài viết thất bại');
+        $success = $this->postService->deletePost($post);
+        return response()->json([
+            'success' => $success,
+            'redirect' => $success ? route('post.index') : null
+        ]);
     }
 
     public function deleteAll()
     {
-        return $this->postService->deleteAllPosts()
-            ? to_route('post.index')->with('success', 'Xoá tất cả bài viết thành công')
-            : to_route('post.index')->with('error', 'Xoá tất cả bài viết thất bại');
+        $success = $this->postService->deleteAllPosts();
+        return response()->json([
+            'success' => $success,
+            'redirect' => $success ? route('post.index') : null
+        ]);
     }
 }

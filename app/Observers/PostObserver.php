@@ -11,29 +11,25 @@ class PostObserver
 {
     public function creating(Post $post): void
     {
-        Log::info('data observer');
-        $originalSlug = Str::slug($post->title);
-        $slug = $originalSlug;
-        $count = 1;
-
-        while (Post::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $count++;
+        if (!$post->slug) {
+            $slug = Str::slug($post->title);
+            $hashSlug = substr(md5(uniqid($slug, true)), 0, 6);
+            $post->slug = "{$slug}-{$hashSlug}";
         }
-        $post->slug = $slug;
-        Log::info('data observer', $post->toArray());
     }
 
     public function created(Post $post): void
     {
-        // $originalSlug = Str::slug($post->title);
-        // $slug = $originalSlug;
-        // $count = 1;
+        //
+    }
 
-        // while (Post::where('slug', $slug)->exists()) {
-        //     $slug = $originalSlug . '-' . $count++;
-        // }
-        // $post->slug = $slug;
-        // $post->save();
+    public function updating(Post $post): void
+    {
+        if ($post->isDirty('title') && $post->slug) {
+            $slug = Str::slug($post->title);
+            $hashSlug = substr(md5(uniqid($slug, true)), 0, 6);
+            $post->slug = "{$slug}-{$hashSlug}";
+        }
     }
 
     public function updated(Post $Post): void

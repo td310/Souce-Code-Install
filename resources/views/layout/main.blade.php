@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>AdminLTE 3</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -20,6 +21,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bootstrap-4/bootstrap-4.css">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" />
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -50,8 +52,8 @@
     </div>
     <!-- ./wrapper -->
 
-    @stack('scripts')
     <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -73,6 +75,8 @@
     <!-- Tempus Dominus -->
     <script src="https://cdn.jsdelivr.net/npm/tempusdominus-bootstrap-4@5.39.0/build/js/tempusdominus-bootstrap-4.min.js">
     </script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
     <script>
         $(function() {
             $('#content').summernote({
@@ -112,6 +116,7 @@
             });
         }
     </script>
+    @stack('scripts')
 </body>
 
 </html>

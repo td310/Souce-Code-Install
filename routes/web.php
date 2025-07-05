@@ -36,6 +36,7 @@ Route::group(['prefix' => 'auth', 'middleware' => 'guest'], function () {
 
 Route::middleware(['check.user.status'])->group(function () {
     Route::delete('/post/delete-all', [PostController::class, 'deleteAll'])->name('post.delete_all');
+    Route::get('/post/data', [PostController::class, 'data'])->name('post.data');
     Route::resource('post', PostController::class);
 
     //Tin tức
