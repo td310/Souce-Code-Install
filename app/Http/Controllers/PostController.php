@@ -54,6 +54,8 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
+        //dd($post->user);
+        //dd($post->user());
         $this->authorize('update', $post);
         return view('post.show', compact('post'));
     }

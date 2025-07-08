@@ -1,16 +1,14 @@
 $(document).ready(function () {
     $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
     });
 
     var table = $('#postsTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: {
-            url: '/post/data',
-            type: 'GET',
+        ajax: { 
+            url: '/post/data', 
+            type: 'GET' 
         },
         pageLength: 5,
         lengthMenu: [[5, 10, 25], [5, 10, 25]],
@@ -21,13 +19,14 @@ $(document).ready(function () {
                 orderable: false,
                 searchable: false,
                 render: function (data) {
-                    return data ? '<img src="' + data + '" alt="thumbnail" style="max-width: 50px;">' : '<span>Không có ảnh</span>';
+                    return data ? `<img src="${data}" alt="thumbnail" style="max-width: 50px;">` : '<span>Không có ảnh</span>';
                 }
             },
             { data: 'title', name: 'title' },
             { data: 'description', name: 'description' },
             {
-                data: 'publish_date', name: 'publish_date',
+                data: 'publish_date',
+                name: 'publish_date',
                 render: function (data) {
                     return data ? data : 'Chưa có ngày xuất bản';
                 }
@@ -41,92 +40,45 @@ $(document).ready(function () {
                 render: function (row) {
                     return `
                         <div class="btn-group">
-                            <a href="/post/${row.id}" class="btn btn-info btn-sm">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="/post/${row.id}/edit" class="btn btn-warning btn-sm">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form id="deleteForm${row.id}" action="/post/${row.id}" method="POST"">
-                                <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr('content')}">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete('deleteForm${row.id}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
+                            <a href="/post/${row.id}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                            <a href="/post/${row.id}/edit" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(${row.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </div>`;
                 }
             }
         ],
-        order: [[3, 'desc']],
         language: {
-            processing: "Đang xử lý...",
-            search: "Tìm kiếm:",
-            lengthMenu: "Hiển thị _MENU_ bản ghi",
-            info: "Hiển thị từ _START_ đến _END_ trong _TOTAL_ bản ghi",
-            infoEmpty: "Hiển thị 0 đến 0 trong 0 bản ghi",
-            loadingRecords: "Đang tải...",
-            zeroRecords: "Không tìm thấy bản ghi nào",
-            emptyTable: "Không có dữ liệu trong bảng",
-            paginate: {
-                previous: "Trước",
-                next: "Sau",
-            },
-            aria: {
-                sortAscending: ": kích hoạt để sắp xếp cột tăng dần",
-                sortDescending: ": kích hoạt để sắp xếp cột giảm dần"
-            }
+            processing: 'Đang xử lý...',
+            search: 'Tìm kiếm:',
+            lengthMenu: 'Hiển thị _MENU_ bản ghi',
+            info: 'Hiển thị từ _START_ đến _END_ trong _TOTAL_ bản ghi',
+            infoEmpty: 'Hiển thị 0 đến 0 trong 0 bản ghi',
+            loadingRecords: 'Đang tải...',
+            emptyTable: 'Không có dữ liệu trong bảng',
+            paginate: { previous: 'Trước', next: 'Sau' }
         }
     });
 
-    window.confirmDelete = function (formId) {
+    window.confirmDelete = function (id, isAll = false) {
         Swal.fire({
             title: 'Bạn có chắc chắn?',
-            text: 'Bạn muốn xóa bài viết này?',
+            text: isAll ? 'Bạn muốn xóa tất cả bài viết?' : 'Bạn muốn xóa bài viết này?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Xóa',
+            confirmButtonText: isAll ? 'Xóa tất cả' : 'Xóa',
             cancelButtonText: 'Hủy'
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: $('#' + formId).attr('action'),
-                    type: 'POST',
-                    data: $('#' + formId).serialize(),
+                    url: isAll ? '/post/delete-all' : `/post/${id}`,
+                    type: 'DELETE',
                     success: function (response) {
                         if (response.success) {
-                            Swal.fire('Đã xóa!', 'Xóa bài viết thành công', 'success');
-                            table.ajax.reload();
-                        } else {
-                            Swal.fire('Thất bại!', 'Xóa bài viết thất bại', 'error');
-                        }
-                    }                    
-                });
-            }
-        });
-    };
-
-    window.confirmDeleteAll = function (formId) {
-        Swal.fire({
-            title: 'Bạn có chắc chắn?',
-            text: 'Bạn muốn xóa tất cả bài viết?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Xóa tất cả',
-            cancelButtonText: 'Hủy'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: $('#' + formId).attr('action'),
-                    type: 'POST',
-                    data: $('#' + formId).serialize(),
-                    success: function (response) {
-                        if (response.success) {
-                            Swal.fire('Đã xóa!', 'Xóa bài viết thành công', 'success');
+                            Swal.fire('Đã xóa!', isAll ? 'Xóa tất cả bài viết thành công' : 'Xóa bài viết thành công', 'success');
                             table.ajax.reload();
                         } else {
                             Swal.fire('Thất bại!', 'Xóa bài viết thất bại', 'error');
@@ -135,5 +87,9 @@ $(document).ready(function () {
                 });
             }
         });
+    };
+
+    window.confirmDeleteAll = function () {
+        confirmDelete(null, true);
     };
 });

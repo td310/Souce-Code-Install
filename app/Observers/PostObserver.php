@@ -4,50 +4,56 @@ namespace App\Observers;
 
 use App\Models\Post;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
 
-class PostObserver
+class PostObserver implements ShouldHandleEventsAfterCommit
 {
-    public function creating(Post $post): void
+    /**
+     * Handle the User "created" event.
+     */
+    public function created(Post $post): void
     {
         if (!$post->slug) {
             $slug = Str::slug($post->title);
             $hashSlug = substr(md5(uniqid($slug, true)), 0, 6);
             $post->slug = "{$slug}-{$hashSlug}";
+            $post->saveQuietly();
         }
     }
 
-    public function created(Post $post): void
-    {
-        //
-    }
-
-    public function updating(Post $post): void
+    /**
+     * Handle the User "updated" event.
+     */
+    public function updated(Post $post): void
     {
         if ($post->isDirty('title') && $post->slug) {
             $slug = Str::slug($post->title);
             $hashSlug = substr(md5(uniqid($slug, true)), 0, 6);
             $post->slug = "{$slug}-{$hashSlug}";
+            $post->saveQuietly();
         }
     }
 
-    public function updated(Post $Post): void
+    /**
+     * Handle the User "deleted" event.
+     */
+    public function deleted(Post $post): void
     {
         //
     }
 
-    public function deleted(Post $Post): void
+    /**
+     * Handle the User "restored" event.
+     */
+    public function restored(Post $post): void
     {
         //
     }
 
-    public function restored(Post $Post): void
-    {
-        //
-    }
-
-    public function forceDeleted(Post $Post): void
+    /**
+     * Handle the User "force deleted" event.
+     */
+    public function forceDeleted(Post $post): void
     {
         //
     }

@@ -10,13 +10,9 @@
                     <a href="{{ route('post.create') }}" class="btn btn-success float-right">
                         <i class="fas fa-plus"></i> Tạo mới
                     </a>
-                    <form id="deleteAllForm" action="{{ route('post.delete_all') }}" method="POST" class="float-right mr-2">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button" class="btn btn-danger" onclick="confirmDeleteAll('deleteAllForm')">
-                            <i class="fas fa-trash-alt"></i> Xóa tất cả
-                        </button>
-                    </form>
+                    <button type="button" class="btn btn-danger float-right mr-2" onclick="confirmDeleteAll()">
+                        <i class="fas fa-trash-alt"></i> Xóa tất cả
+                    </button>
                 </div>
             </div>
         </div>
@@ -49,4 +45,15 @@
 @endsection
 @push('scripts')
     <script src="{{ asset('vendor/datatables/post-datatable.js') }}"></script>
+    @if (session('success'))
+        <script>
+            alert('{{ session('success') }}');
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            alert('{{ session('error') }}');
+        </script>
+    @endif
 @endpush

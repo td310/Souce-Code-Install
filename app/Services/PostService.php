@@ -87,7 +87,7 @@ class PostService
         $start = $request->input('start', 0);
         $length = $request->input('length', 5);
         
-        $total = $query->count();
+        $total = $query->count(); 
         
         $posts = $query->skip($start)
                       ->take($length)

@@ -77,6 +77,7 @@
     </script>
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+    
     <script>
         $(function() {
             $('#content').summernote({
