@@ -8,7 +8,7 @@ use Illuminate\Auth\Access\Response;
 
 class PostPolicy
 {
-    public function update(User $user, Post $post): Response
+    public function userPost(User $user, Post $post): Response
     {
         return $user->id === $post->user_id
             ? Response::allow()

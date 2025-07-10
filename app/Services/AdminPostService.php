@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Enums\PostStatus;
-use Carbon\Carbon;
+use App\Jobs\SendPostStatusJob;
 
-class PostService
+class AdminPostService
 {
-    public function createPost(array $data)
+    public function adminCreatePost(array $data)
     {
         DB::beginTransaction();
         try {
@@ -34,10 +34,11 @@ class PostService
         }
     }
 
-    public function updatePost(Post $post, array $data)
+    public function adminUpdatePost(Post $post, array $data)
     {
         DB::beginTransaction();
         try {
+            $originalStatus = $post->status;
             $post->update($data);
 
             if (!empty($data['file'])) {
@@ -45,16 +46,21 @@ class PostService
                 $post->addMedia($data['file'])->toMediaCollection('thumbnail');
             }
 
+            if ($data['status'] != $originalStatus->value) {
+                $newStatus = PostStatus::from($data['status']);
+                SendPostStatusJob::dispatch($post, $newStatus);
+            }
+
             DB::commit();
-            return true;
+            return $post;
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Post update failed: ' . $e->getMessage());
-            return false;
+            throw $e;
         }
     }
 
-    public function deletePost(Post $post)
+    public function adminDeletePost(Post $post)
     {
         DB::beginTransaction();
         try {
@@ -68,11 +74,11 @@ class PostService
         }
     }
 
-    public function deleteAllPosts()
+    public function adminDeleteAllPosts()
     {
         DB::beginTransaction();
         try {
-            Auth::user()->posts()->delete();
+            Post::query()->delete();
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -82,14 +88,18 @@ class PostService
         }
     }
 
-    public function getDataTableData(Request $request)
+    public function getAdminPostData(Request $request)
     {
-        $query = Post::with(['user', 'media'])
-            ->where('user_id', Auth::id());
+        $query = Post::with(['user', 'media']);
 
-        if ($request->has('search.value')) {
-            $searchValue = $request->input('search.value');
-            $query->where('title', 'like', "%{$searchValue}%");
+        $searchValue = $request->input('search.value');
+        if (!empty($searchValue)) {
+            $query->where(function ($q) use ($searchValue) {
+                $q->where('title', 'like', "%{$searchValue}%")
+                    ->orWhereHas('user', function ($q) use ($searchValue) {
+                        $q->where('email', 'like', "%{$searchValue}%");
+                    });
+            });
         }
 
         $query->orderBy('publish_date', 'desc');
@@ -102,11 +112,12 @@ class PostService
         $data = $posts->map(function ($post) {
             return [
                 'id' => $post->id,
+                'email' => $post->user->email,
                 'thumbnail' => $post->thumbnail,
-                'title' => $post->title,
+                'title' => Str::limit($post->title, 50, '...'),
                 'description' => Str::limit($post->description, 50, '...'),
                 'publish_date' => $post->publish_date,
-                'status' => $post->status_label,
+                'status_label' => $post->status_label,
             ];
         });
 
@@ -116,13 +127,5 @@ class PostService
             'recordsFiltered' => $posts->total(),
             'data' => $data
         ];
-    }
-
-    public function getPublishedPosts()
-    {
-        return Post::where('status', PostStatus::APPROVE)
-            ->where('publish_date', '<=', Carbon::now())
-            ->latest('publish_date')
-            ->get();
     }
 }

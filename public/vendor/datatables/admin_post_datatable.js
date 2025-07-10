@@ -3,16 +3,17 @@ $(document).ready(function () {
         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
     });
 
-    var table = $('#postsTable').DataTable({
+    var table = $('#adminPostsTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: { 
-            url: '/post/data', 
-            type: 'GET' 
+        ajax: {
+            url: '/admin/post/data',
+            type: 'GET'
         },
         pageLength: 5,
         lengthMenu: [[5, 10, 25], [5, 10, 25]],
         columns: [
+            { data: 'email', name: 'email', searchable: true },
             {
                 data: 'thumbnail',
                 name: 'thumbnail',
@@ -22,11 +23,12 @@ $(document).ready(function () {
                     return data ? `<img src="${data}" alt="thumbnail" style="max-width: 50px;">` : '<span>Không có ảnh</span>';
                 }
             },
-            { data: 'title', name: 'title' },
-            { data: 'description', name: 'description' },
+            { data: 'title', name: 'title', searchable: true },
+            { data: 'description', name: 'description', searchable: false },
             {
                 data: 'publish_date',
                 name: 'publish_date',
+                orderable: true,
                 render: function (data) {
                     return data ? data : 'Chưa có ngày xuất bản';
                 }
@@ -40,8 +42,8 @@ $(document).ready(function () {
                 render: function (row) {
                     return `
                         <div class="btn-group">
-                            <a href="/post/${row.id}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                            <a href="/post/${row.id}/edit" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                            <a href="/admin/post/${row.id}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                            <a href="/admin/post/${row.id}/edit" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                             <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(${row.id})">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -49,6 +51,7 @@ $(document).ready(function () {
                 }
             }
         ],
+        order: [[4, 'desc']],
         language: {
             processing: 'Đang xử lý...',
             search: 'Tìm kiếm:',
@@ -74,7 +77,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: isAll ? '/post/delete-all' : `/post/${id}`,
+                    url: isAll ? '/admin/post/delete-all' : `/admin/post/${id}`,
                     type: 'DELETE',
                     success: function (response) {
                         if (response.success) {

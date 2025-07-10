@@ -9,7 +9,7 @@
                 <div class="col-md-4">
                     <a href="">
                         @if ($posts->thumbnail)
-                            <img src="{{ $posts->thumbnail }}" alt="Thumbnail" class="img-fluid" style="width: 100%; height: auto;">
+                            <img src="{{ $posts->thumbnail }}" alt="Thumbnail" class="img-fluid" style="width: 150px; height: auto;">
                         @else
                             No Image Available
                         @endif
@@ -22,7 +22,7 @@
                         </a>
                     </h5>
                     <small class="text-muted d-block mb-2">
-                        {{ $posts->published_at }}
+                        {{ $posts->publish_date }}
                     </small>
                     <p style="margin-bottom: 0;">
                         {{ $posts->description }}

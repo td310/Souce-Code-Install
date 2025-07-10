@@ -26,10 +26,10 @@
                     </div>
 
                     <div class="card-footer text-right">
-                        <a href="{{ route('post.index') }}" class="btn btn-secondary">
+                        <a href="{{ route('admin.post.index') }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left mr-1"></i> Quay lại danh sách
                         </a>
-                        <a href="{{ route('post.edit', $post) }}" class="btn btn-warning">
+                        <a href="{{ route('admin.post.edit', $post) }}" class="btn btn-warning">
                             <i class="fas fa-edit mr-1"></i> Chỉnh sửa
                         </a>
                     </div>

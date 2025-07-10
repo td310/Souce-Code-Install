@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\AdminPostController;
+use App\Http\Controllers\AdminUserController;
 
 //Demo XSS
 Route::get('/comments', [CommentController::class, 'index']);
@@ -18,7 +20,7 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'auth', 'middleware' => 'guest'], function () {
-    // Form đăng ký
+    //Form đăng ký
     Route::get('/register', [AuthController::class, 'showRegister'])->name('auth.register');
     Route::post('/register', [AuthController::class, 'register'])->name('auth.register.post');
 
@@ -34,11 +36,25 @@ Route::group(['prefix' => 'auth', 'middleware' => 'guest'], function () {
     Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('auth.reset_password.post');
 });
 
-Route::middleware(['check.user.status'])->group(function () {
-    Route::delete('/post/delete-all', [PostController::class, 'deleteAll'])->name('post.delete_all');
-    Route::get('/post/data', [PostController::class, 'data'])->name('post.data');
+Route::group(['middleware' => ['auth', 'check.user.status', 'role:user']], function () {
+    //Bài viết
+    Route::delete('/post/delete-all', [PostController::class, 'deleteAll']);
+    Route::get('/post/data', [PostController::class, 'data']);
     Route::resource('post', PostController::class);
+});
 
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'check.user.status', 'role:admin']], function () {
+    //Quản lý bài viết
+    Route::delete('/post/delete-all', [AdminPostController::class, 'adminDeleteAll']);
+    Route::get('/post/data', [AdminPostController::class, 'data']);
+    Route::resource('/post', AdminPostController::class)->names('admin.post');
+
+    //Quản lý người dùng
+    Route::get('/user/data', [AdminUserController::class, 'data']);
+    Route::resource('/user', AdminUserController::class)->names('admin.user');
+});
+
+Route::middleware(['auth', 'check.user.status'])->group(function () {
     //Tin tức
     Route::get('/news', [PostController::class, 'news'])->name('post.news');
     Route::get('/news/{post:slug}', [PostController::class, 'newsDetail'])->name('post.news_detail');
@@ -47,5 +63,6 @@ Route::middleware(['check.user.status'])->group(function () {
     Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile.show');
     Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
 });
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::get('/auth/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('auth.reset_password.show');

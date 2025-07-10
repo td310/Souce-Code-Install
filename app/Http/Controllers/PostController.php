@@ -31,7 +31,7 @@ class PostController extends Controller
 
     public function news()
     {
-        $post = Post::where('status', PostStatus::APPROVE)->latest()->get();
+        $post = $this->postService->getPublishedPosts();
         return view('post.news', compact('post'));
     }
 
@@ -54,15 +54,14 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
-        //dd($post->user);
-        //dd($post->user());
-        $this->authorize('update', $post);
+        //$post->load('user');
+        $this->authorize('userPost', $post);
         return view('post.show', compact('post'));
     }
 
     public function edit(Post $post)
     {
-        $this->authorize('update', $post);
+        $this->authorize('userPost', $post);
         return view('post.edit', compact('post'));
     }
 

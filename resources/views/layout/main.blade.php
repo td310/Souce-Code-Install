@@ -77,7 +77,7 @@
     </script>
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
-    
+
     <script>
         $(function() {
             $('#content').summernote({
@@ -118,6 +118,17 @@
         }
     </script>
     @stack('scripts')
+    @if (session('success'))
+        <script>
+            alert('{{ session('success') }}');
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            alert('{{ session('error') }}');
+        </script>
+    @endif
 </body>
 
 </html>

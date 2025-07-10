@@ -15,8 +15,8 @@
                                                     class="text-danger">*</span></label>
                                             <div class="col-sm-9">
                                                 <input type="text"
-                                                    class="form-control @error('title') is-invalid @enderror" name="title" id="title"
-                                                    value="{{ old('title') }}">
+                                                    class="form-control @error('title') is-invalid @enderror" name="title"
+                                                    id="title" value="{{ old('title') }}">
                                                 @error('title')
                                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                                 @enderror
@@ -53,7 +53,8 @@
 
                                     <div class="form-group">
                                         <div class="row align-items-center mb-2">
-                                            <label class="col-sm-3 col-form-label">Ngày xuất bản</label>
+                                            <label class="col-sm-3 col-form-label">Ngày xuất bản<span
+                                                    class="text-danger">*</span></label>
                                             <div class="col-sm-9">
                                                 <div class="input-group date" id="publish_date" data-target-input="nearest">
                                                     <input type="text"

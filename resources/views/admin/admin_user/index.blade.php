@@ -7,12 +7,9 @@
                     <h1>Danh sách bài viết</h1>
                 </div>
                 <div class="col-sm-6">
-                    <a href="{{ route('post.create') }}" class="btn btn-success float-right">
+                    <a href="{{ route('admin.user.create') }}" class="btn btn-success float-right">
                         <i class="fas fa-plus"></i> Tạo mới
                     </a>
-                    <button type="button" class="btn btn-danger float-right mr-2" onclick="confirmDeleteAll()">
-                        <i class="fas fa-trash-alt"></i> Xóa tất cả
-                    </button>
                 </div>
             </div>
         </div>
@@ -23,13 +20,12 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <table id="postsTable" class="table table-bordered table-striped">
+                            <table id="adminUsersTable" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Hình ảnh</th>
-                                        <th>Tiêu đề</th>
-                                        <th>Mô tả</th>
-                                        <th>Ngày xuất bản</th>
+                                        <th>Tên người dùng</th>
+                                        <th>Email</th>
+                                        <th>Địa chỉ</th>
                                         <th>Trạng thái</th>
                                         <th>Hành động</th>
                                     </tr>
@@ -44,5 +40,5 @@
     </section>
 @endsection
 @push('scripts')
-    <script src="{{ asset('vendor/datatables/post_datatable.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/admin_user_datatable.js') }}"></script>
 @endpush

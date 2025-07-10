@@ -15,7 +15,8 @@
                                         <div class="input-group mb-3">
                                             <input type="text" id="first_name"
                                                 class="form-control @error('first_name') is-invalid @enderror"
-                                                name="first_name" placeholder="First Name" value="{{ old('first_name', $user->first_name) }}">
+                                                name="first_name" placeholder="First Name"
+                                                value="{{ old('first_name', $user->first_name) }}">
                                             @error('first_name')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -26,7 +27,8 @@
                                         <div class="input-group mb-3">
                                             <input type="text" id="last_name"
                                                 class="form-control @error('last_name') is-invalid @enderror"
-                                                name="last_name" placeholder="Last Name" value="{{ old('last_name', $user->last_name) }}">
+                                                name="last_name" placeholder="Last Name"
+                                                value="{{ old('last_name', $user->last_name) }}">
                                             @error('last_name')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -47,7 +49,11 @@
                                         <button type="submit" class="btn btn-primary px-4">
                                             <i class="fas fa-user-edit mr-2"></i>Chỉnh sửa hồ sơ
                                         </button>
-                                        <a class="btn btn-secondary" href="{{ route('post.index') }}">Đóng</a>
+                                        @can('adminAccess', Auth::user())
+                                            <a class="btn btn-secondary" href="{{ route('admin.post.index') }}">Đóng</a>
+                                        @else
+                                            <a class="btn btn-secondary" href="{{ route('post.news') }}">Đóng</a>
+                                        @endcan
                                     </div>
                                 </form>
                             </div>

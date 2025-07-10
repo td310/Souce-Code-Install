@@ -9,7 +9,7 @@ use App\Http\Requests\ForgotPassRequest;
 use App\Http\Requests\ResetPassRequest;
 use App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Enums\AuthRole;
 
 class AuthController extends Controller
 {
@@ -55,11 +55,19 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        return $this->authService->loginUser($request->validated())
-            ? to_route('post.index')->with('success', 'Đăng nhập thành công')
-            : to_route('auth.login')->with('error', 'Đăng nhập thất bại');
+        $user = $this->authService->loginUser($request->validated());
+    
+        if (!$user) {
+            return to_route('auth.login')->with('error', 'Đăng nhập thất bại');
+        }
+    
+        return match ($user->role) {
+            AuthRole::ADMIN => to_route('admin.post.index')->with('success', 'Đăng nhập thành công'),
+            AuthRole::USER => to_route('post.index')->with('success', 'Đăng nhập thành công'),
+            default => to_route('auth.login')->with('error', 'Vai trò không hợp lệ')
+        };
     }
-
+    
     public function logout()
     {
         Auth::logout();

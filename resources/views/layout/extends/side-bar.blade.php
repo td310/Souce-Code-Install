@@ -11,17 +11,32 @@
     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item">
-                <a href="{{ route('post.index') }}" class="nav-link">
-                    <i class="nav-icon fas fa-newspaper"></i>
-                    <p>Bài viết</p>
-                </a>
-            </li>
-            <li class="nav-item">
                 <a href="{{ route('post.news') }}" class="nav-link">
                     <i class="nav-icon fas fa-rss"></i>
                     <p>Tin tức</p>
                 </a>
             </li>
+            @can('adminAccess', Auth::user())
+                <li class="nav-item">
+                    <a href="{{ route('admin.post.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-tasks"></i>
+                        <p>Quản lý bài viết</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.user.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Quản lý người dùng</p>
+                    </a>
+                </li>
+            @else
+                <li class="nav-item">
+                    <a href="{{ route('post.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-newspaper"></i>
+                        <p>Bài viết</p>
+                    </a>
+                </li>
+            @endcan
         </ul>
     </nav>
     <!-- /.sidebar-menu -->

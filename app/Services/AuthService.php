@@ -41,7 +41,7 @@ class AuthService
         }
     
         if (Auth::attempt($credentials)) {
-            return true;
+            return $user;
         }
     
         return false;
