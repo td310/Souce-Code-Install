@@ -19,14 +19,14 @@ class PostFactory extends Factory
             'content' => $this->faker->paragraphs(3, true),
             'publish_date' => $this->faker->optional()->dateTimeBetween('-1 month', '+1 week'),
             'status' => 0,
-            'user_id' => 23,
+            'user_id' => 2,
         ];
     }
 
     public function configure()
     {
         return $this->afterCreating(function (Post $post) {
-            $localImagePath = storage_path('app/public/1/per3.jpg');
+            $localImagePath = storage_path('app/public/3/per3.jpg');
             if (file_exists($localImagePath)) {
                 $post->addMedia($localImagePath)
                     ->preservingOriginal()

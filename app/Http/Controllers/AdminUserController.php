@@ -58,10 +58,11 @@ class AdminUserController extends Controller
 
     public function destroy(User $user)
     {
-        $success = $this->adminUserService->adminDeleteUser($user);
-        return response()->json([
-            'success' => $success,
-            'redirect' => $success ? route('admin.user.index') : null
-        ]);
+        //
+    }
+
+    public function statusUser(User $user)
+    {
+        return response()->json($this->adminUserService->toggleLock($user));
     }
 }

@@ -6,7 +6,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Enums\AuthRole;
+use App\Enums\AuthStatus;
 
 class AdminUserService
 {
@@ -40,21 +41,7 @@ class AdminUserService
             throw $e;
         }
     }
-
-    public function adminDeleteUser(User $user)
-    {
-        DB::beginTransaction();
-        try {
-            $user->delete();
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('User deletion failed: ' . $e->getMessage());
-            return false;
-        }
-    }
-
+    
     public function getAdminUserData(Request $request)
     {
         $query = User::query();
@@ -81,6 +68,8 @@ class AdminUserService
                 'email' => $user->email,
                 'address' => $user->address,
                 'status_label' => $user->status_label,
+                'status_user' => $user->status->name,
+                'is_admin' => $user->role === AuthRole::ADMIN,
             ];
         });
 
@@ -89,6 +78,18 @@ class AdminUserService
             'recordsTotal' => $users->total(),
             'recordsFiltered' => $users->total(),
             'data' => $data
+        ];
+    }
+
+    public function toggleLock(User $user)
+    {
+        $newStatus = $user->status === AuthStatus::LOCKED ? AuthStatus::APPROVED : AuthStatus::LOCKED;
+        $user->update(['status' => $newStatus]);
+
+        $message = $newStatus === AuthStatus::APPROVED ? 'Mở khóa tài khoản thành công.' : 'Khóa tài khoản thành công.';
+        return [
+            'success' => true,
+            'message' => $message
         ];
     }
 }

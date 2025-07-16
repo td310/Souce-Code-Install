@@ -117,7 +117,6 @@
             });
         }
     </script>
-    @stack('scripts')
     @if (session('success'))
         <script>
             alert('{{ session('success') }}');
@@ -129,6 +128,7 @@
             alert('{{ session('error') }}');
         </script>
     @endif
+    @stack('scripts')
 </body>
 
 </html>

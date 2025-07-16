@@ -29,11 +29,17 @@ class PostController extends Controller
         return response()->json($this->postService->getDataTableData($request));
     }
 
-    public function news()
+    public function news(Request $request)
     {
-        $post = $this->postService->getPublishedPosts();
-        return view('post.news', compact('post'));
+        $posts = $this->postService->getPublishedPosts();
+    
+        if ($request->ajax()) {
+            return view('post.partial.new_list', compact('posts'))->render(); 
+        }
+    
+        return view('post.news', compact('posts')); 
     }
+    
 
     public function newsDetail(Post $post)
     {

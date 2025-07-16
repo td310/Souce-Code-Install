@@ -123,6 +123,6 @@ class PostService
         return Post::where('status', PostStatus::APPROVE)
             ->where('publish_date', '<=', Carbon::now())
             ->latest('publish_date')
-            ->get();
+            ->paginate(5);
     }
 }

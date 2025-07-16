@@ -20,46 +20,47 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'auth', 'middleware' => 'guest'], function () {
-    //Form đăng ký
+    //Register
     Route::get('/register', [AuthController::class, 'showRegister'])->name('auth.register');
     Route::post('/register', [AuthController::class, 'register'])->name('auth.register.post');
 
-    //Form đăng nhập
+    //Login
     Route::get('/login', [AuthController::class, 'showLogin'])->name('auth.login');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login.post');
 
-    //Quên mật khẩu
+    //Forgot Password
     Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('auth.forgot_password');
     Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('auth.forgot_password.post');
 
-    //Reset mật khẩu mới
+    //Reset Password
     Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('auth.reset_password.post');
 });
 
 Route::group(['middleware' => ['auth', 'check.user.status', 'role:user']], function () {
-    //Bài viết
+    //Post
     Route::delete('/post/delete-all', [PostController::class, 'deleteAll']);
     Route::get('/post/data', [PostController::class, 'data']);
     Route::resource('post', PostController::class);
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'check.user.status', 'role:admin']], function () {
-    //Quản lý bài viết
+    //Manage Post
     Route::delete('/post/delete-all', [AdminPostController::class, 'adminDeleteAll']);
     Route::get('/post/data', [AdminPostController::class, 'data']);
     Route::resource('/post', AdminPostController::class)->names('admin.post');
 
-    //Quản lý người dùng
+    //Manage User
     Route::get('/user/data', [AdminUserController::class, 'data']);
+    Route::put('/user/{user}/toggle-lock', [AdminUserController::class, 'statusUser']);
     Route::resource('/user', AdminUserController::class)->names('admin.user');
 });
 
 Route::middleware(['auth', 'check.user.status'])->group(function () {
-    //Tin tức
+    //News
     Route::get('/news', [PostController::class, 'news'])->name('post.news');
     Route::get('/news/{post:slug}', [PostController::class, 'newsDetail'])->name('post.news_detail');
 
-    //Cập nhật hồ sơ
+    //Profile
     Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile.show');
     Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
 });

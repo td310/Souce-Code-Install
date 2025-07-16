@@ -1,7 +1,7 @@
 @extends('layout.main')
 @section('contents')
 <section class="content">
-    {{-- <h3>{{$post->user->name}}</h3> --}}
+    <h3>{{$post->user->name}}</h3>
     <div class="container-fluid">
         <div class="row justify-content-center mt-4">
             <div class="col-md-10">

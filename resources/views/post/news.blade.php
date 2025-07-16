@@ -3,33 +3,32 @@
 <section class="content">
     <div class="container-fluid mt-4">
         <h3 class="mb-3" style="border-left: 4px solid red; padding-left: 10px; font-weight: bold;">TIN MỚI</h3>
-
-        @foreach ($post as $posts)
-            <div class="row mb-3 pb-3 border-bottom">
-                <div class="col-md-4">
-                    <a href="">
-                        @if ($posts->thumbnail)
-                            <img src="{{ $posts->thumbnail }}" alt="Thumbnail" class="img-fluid" style="width: 150px; height: auto;">
-                        @else
-                            No Image Available
-                        @endif
-                    </a>
-                </div>
-                <div class="col-md-8">
-                    <h5 style="font-weight: bold;">
-                        <a href="{{ route('post.news_detail', $posts->slug) }}" class="text-dark">
-                            {{ $posts->title }}
-                        </a>
-                    </h5>
-                    <small class="text-muted d-block mb-2">
-                        {{ $posts->publish_date }}
-                    </small>
-                    <p style="margin-bottom: 0;">
-                        {{ $posts->description }}
-                    </p>
-                </div>
-            </div>
-        @endforeach
+        <div id="post-container">
+            @include('post.partial.new_list', ['posts' => $posts])
+        </div>
     </div>
 </section>
 @endsection
+@push('scripts')
+<script>
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        let page = $(this).attr('href').split('page=')[1];
+        
+        fetchPosts(page);
+    });
+
+    function fetchPosts(page) {
+        $.ajax({
+            url: "?page=" + page,
+            type: "GET",
+            success: function (data) {
+                $('#post-container').html(data);
+            },
+            error: function () {
+                alert("Lỗi tải data");
+            }
+        });
+    }
+</script>
+@endpush
