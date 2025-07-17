@@ -40,9 +40,9 @@ class PostController extends Controller
         return view('post.news', compact('posts')); 
     }
     
-
     public function newsDetail(Post $post)
     {
+        $post->load(['comments.user', 'likes']);
         return view('post.news_detail', compact('post'));
     }
 

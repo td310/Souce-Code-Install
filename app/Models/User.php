@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Enums\AuthStatus;
 use App\Enums\AuthRole;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Attributes\UsePolicy;
+use App\Policies\AdminPostPolicy;
 
+#[UsePolicy(AdminPostPolicy::class)]
 class User extends Authenticatable
 {
     use HasFactory;
@@ -52,5 +54,15 @@ class User extends Authenticatable
     public function posts()
     {
         return $this->hasMany(Post::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(PostComment::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(PostLike::class);
     }
 }

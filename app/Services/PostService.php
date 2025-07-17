@@ -19,6 +19,9 @@ class PostService
         try {
             $data['user_id'] = Auth::id();
 
+            //Post::flushEventListeners();
+            // $post = new Post($data);
+            // $post->saveQuietly();
             $post = Post::create($data);
 
             if (!empty($data['file'])) {
@@ -38,6 +41,8 @@ class PostService
     {
         DB::beginTransaction();
         try {
+            // $post->fill($data);
+            // $post->saveQuietly();
             $post->update($data);
 
             if (!empty($data['file'])) {

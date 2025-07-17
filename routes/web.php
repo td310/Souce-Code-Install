@@ -3,17 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AdminPostController;
 use App\Http\Controllers\AdminUserController;
-
-//Demo XSS
-Route::get('/comments', [CommentController::class, 'index']);
-Route::post('/comments', [CommentController::class, 'store']);
-
-#---------------------------------#
-Route::get('/home', [HomeController::class, 'index']);
+use App\Http\Controllers\PostCommentController;
+use App\Http\Controllers\PostLikeController;
 
 Route::get('/', function () {
     return redirect()->route('auth.login');
@@ -59,6 +52,14 @@ Route::middleware(['auth', 'check.user.status'])->group(function () {
     //News
     Route::get('/news', [PostController::class, 'news'])->name('post.news');
     Route::get('/news/{post:slug}', [PostController::class, 'newsDetail'])->name('post.news_detail');
+
+    // Comment
+    Route::post('/news/{post}/comment', [PostCommentController::class, 'store'])->name('comment.store');
+    Route::delete('/comment/{comment}', [PostCommentController::class, 'destroy'])->name('comment.destroy');
+
+    // Like
+    Route::post('/news/{post}/like', [PostLikeController::class, 'store'])->name('like.store');
+    Route::delete('/news/{post}/unlike', [PostLikeController::class, 'destroy'])->name('like.destroy');
 
     //Profile
     Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile.show');
