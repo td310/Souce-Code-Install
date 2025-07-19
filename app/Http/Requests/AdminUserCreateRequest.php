@@ -36,7 +36,7 @@ class AdminUserCreateRequest extends FormRequest
             ],
             'status' => [
                 'nullable',
-                Rule::in(array_column(AuthStatus::cases(), 'value')),
+                Rule::enum(AuthStatus::class),
             ]
         ];
     }

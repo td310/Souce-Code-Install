@@ -12,8 +12,8 @@ class PostCommentService
 {
     public function storeComment(Post $post, array $data)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $comment = $post->comments()->create([
                 'content' => $data['content'],
                 'user_id' => Auth::id(),
@@ -36,8 +36,8 @@ class PostCommentService
 
     public function destroyComment(PostComment $comment)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $comment->delete();
             DB::commit();
             return [
