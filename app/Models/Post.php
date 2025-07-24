@@ -23,7 +23,7 @@ class Post extends Model implements HasMedia
         'title',
         'slug',
         'description',
-        'content', 
+        'content',
         'publish_date',
         'status',
         'user_id'
@@ -36,19 +36,19 @@ class Post extends Model implements HasMedia
 
     public function comments()
     {
-        return $this->hasMany(PostComment::class);
+        return $this->morphMany(PostComment::class, 'commentable');
     }
 
     public function likes()
     {
-        return $this->hasMany(PostLike::class);
+        return $this->morphMany(PostLike::class, 'likeable');
     }
 
     public function isLikedByUser($userId)
     {
         return $this->likes()->where('user_id', $userId)->exists();
     }
-    
+
     protected function casts(): array
     {
         return [
@@ -62,7 +62,7 @@ class Post extends Model implements HasMedia
         return $media ? $media->getUrl() : null;
     }
 
-    public function getStatusLabelAttribute(): string
+    public function getPostStatusLabelAttribute(): string
     {
         return $this->status->label();
     }

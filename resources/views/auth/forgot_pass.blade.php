@@ -17,30 +17,22 @@
         <div class="login-logo">
             <a href="#"><b>Admint LTE</b></a>
         </div>
-
         <div class="card">
             <div class="card-body login-card-body">
                 <p class="login-box-msg">You forgot your password? Here you can easily retrieve a new password.</p>
 
                 <form method="POST" action="{{ route('auth.forgot_password.post') }}">
                     @csrf
-                    <div class="form-group">
-                        <label for="email">Email <span class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="email" id="email"
-                                class="form-control @error('email') is-invalid @enderror" name="email"
-                                placeholder="Email" value="{{ old('email') }}">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-envelope"></span>
-                                </div>
-                            </div>
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
+                    <x-form-input 
+                        label="Email" 
+                        name="email" 
+                        type="text" 
+                        :value="old('email')" 
+                        :is-required="true" 
+                        :is-login="true" 
+                        placeholder="Nhập email" 
+                        icon="fa-envelope"
+                    />
                     <div class="row mb-3">
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary btn-block">
@@ -49,7 +41,6 @@
                         </div>
                     </div>
                 </form>
-
                 <div class="text-center mt-4">
                     <a href="{{ route('auth.login') }}" class="btn btn-outline-primary btn-block">
                         <i class="fas fa-sign-in-alt mr-2"></i>Back to login

@@ -6,9 +6,14 @@ $(document).ready(function () {
     var table = $('#postsTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: { 
-            url: '/post/data', 
-            type: 'GET'
+        searching: false,
+        ajax: {
+            url: postRoutes.data,
+            type: 'GET',
+            data: function (d) {
+                d.title = $('#searchTitle').val();
+                d.status = $('#searchStatus').val();
+            }
         },
         pageLength: 5,
         lengthMenu: [[5, 10, 25], [5, 10, 25]],
@@ -17,13 +22,12 @@ $(document).ready(function () {
                 data: 'thumbnail',
                 name: 'thumbnail',
                 orderable: false,
-                searchable: false,
                 render: function (data) {
                     return data ? `<img src="${data}" alt="thumbnail" style="max-width: 50px;">` : '<span>Không có ảnh</span>';
                 }
             },
-            { data: 'title', name: 'title', searchable: true },
-            { data: 'description', name: 'description', searchable: false },
+            { data: 'title', name: 'title' },
+            { data: 'description', name: 'description' },
             {
                 data: 'publish_date',
                 name: 'publish_date',
@@ -37,12 +41,11 @@ $(document).ready(function () {
                 data: null,
                 name: 'action',
                 orderable: false,
-                searchable: false,
                 render: function (row) {
                     return `
                         <div class="btn-group">
-                            <a href="/post/${row.id}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                            <a href="/post/${row.id}/edit" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                            <a href="${postRoutes.show(row.id)}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                            <a href="${postRoutes.edit(row.id)}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                             <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(${row.id})">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -63,6 +66,17 @@ $(document).ready(function () {
         }
     });
 
+    $('#searchForm').on('submit', function (e) {
+        e.preventDefault();
+        table.ajax.reload();
+    });
+
+    window.resetSearch = function () {
+        $('#searchTitle').val('');
+        $('#searchStatus').val('');
+        table.ajax.reload();
+    };
+
     window.confirmDelete = function (id, isAll = false) {
         Swal.fire({
             title: 'Bạn có chắc chắn?',
@@ -76,7 +90,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: isAll ? '/post/delete-all' : `/post/${id}`,
+                    url: isAll ? postRoutes.deleteAll : postRoutes.delete(id),
                     type: 'DELETE',
                     success: function (response) {
                         if (response.success) {

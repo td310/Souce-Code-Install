@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Requests\Admin\UserCreateRequest;
+use App\Http\Requests\Admin\UserUpdateRequest;
+use App\Services\Admin\UserService;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\User;
+
+class UserController extends Controller
+{
+    protected $adminUserService;
+
+    public function __construct(UserService $adminUserService)
+    {
+        $this->adminUserService = $adminUserService;
+    }
+
+    public function data(Request $request)
+    {
+        return response()->json($this->adminUserService->getAdminUserData($request->all()));
+    }
+
+    public function index()
+    {
+        return view('admin.admin_user.index');
+    }
+
+    public function create()
+    {
+        return view('admin.admin_user.create');
+    }
+
+    public function store(UserCreateRequest $request)
+    {
+        return $this->adminUserService->adminCreateUser($request->validated())
+            ? to_route('admin.user.index')->with('success', 'Tạo người dùng thành công.')
+            : to_route('admin.user.index')->with('error', 'Tạo người dùng thất bại.');
+    }
+
+    public function show(User $user)
+    {
+        return view('admin.admin_user.show', compact('user'));
+    }
+
+    public function edit(User $user)
+    {
+        return view('admin.admin_user.edit', compact('user'));
+    }
+
+    public function update(UserUpdateRequest $request, User $user)
+    {
+        return $this->adminUserService->adminUpdateUser($user, $request->validated())
+            ? to_route('admin.user.index')->with('success', 'Cập nhật người dùng thành công.')
+            : to_route('admin.user.index')->with('error', 'Cập nhật người dùng thất bại.');
+    }
+
+    public function destroy(User $user)
+    {
+        //
+    }
+
+    public function statusUser(User $user)
+    {
+        return response()->json($this->adminUserService->toggleLock($user));
+    }
+}

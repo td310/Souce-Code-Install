@@ -19,6 +19,34 @@
     </section>
     <section class="content">
         <div class="container-fluid">
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <form id="searchForm" class="form-inline">
+                                <x-form-input 
+                                    label="Tìm kiếm" 
+                                    name="search_text" 
+                                    id="searchText"
+                                    placeholder="Nhập tiêu đề hoặc email" 
+                                    :is-search="true" 
+                                />
+                                <x-form-select
+                                    label="Trạng thái"
+                                    name="status"
+                                    id="searchStatus"
+                                    :options="\App\Enums\PostStatus::cases()"
+                                    :is-search="true"
+                                    :placeholder="'Tất cả'"
+                                />
+                                <button type="submit" class="btn btn-primary mb-2">Tìm kiếm</button>
+                                <button type="button" class="btn btn-secondary mb-2 ml-2" onclick="resetSearch()">Xóa bộ
+                                    lọc</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -45,5 +73,14 @@
     </section>
 @endsection
 @push('scripts')
+    <script>
+        const adminPostRoutes = {
+            data: @json(route('admin.post.data')),
+            deleteAll: @json(route('admin.post.delete_all')),
+            show: (id) => @json(route('admin.post.show', ':id')).replace(':id', id),
+            edit: (id) => @json(route('admin.post.edit', ':id')).replace(':id', id),
+            delete: (id) => @json(route('admin.post.destroy', ':id')).replace(':id', id)
+        };
+    </script>
     <script src="{{ asset('vendor/datatables/admin_post_datatable.js') }}"></script>
 @endpush

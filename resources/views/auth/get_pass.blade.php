@@ -25,41 +25,25 @@
                 <form method="POST" action="{{ route('auth.reset_password.post') }}">
                     <input type="hidden" name="token" value="{{ $token }}">
                     @csrf
-                    <div class="form-group">
-                        <label for="password">Password <span class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="password" id="password"
-                                class="form-control @error('password') is-invalid @enderror" name="password"
-                                placeholder="Password">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-lock"></span>
-                                </div>
-                            </div>
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
+                    <x-form-input 
+                        label="Mật khẩu" 
+                        name="password" 
+                        type="password" 
+                        :is-required="true" 
+                        :is-login="true" 
+                        placeholder="Nhập mật khẩu" 
+                        icon="fa-lock"
+                    />
 
-                    <div class="form-group">
-                        <label for="password_confirmation">Password Confirmation <span
-                                class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="password" id="password_confirmation"
-                                class="form-control @error('password_confirmation') is-invalid @enderror"
-                                name="password_confirmation" placeholder="Confirm Password">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-lock"></span>
-                                </div>
-                            </div>
-                            @error('password_confirmation')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
+                    <x-form-input 
+                        label="Xác nhận mật khẩu" 
+                        name="password_confirmation" 
+                        type="password" 
+                        :is-required="true" 
+                        :is-login="true" 
+                        placeholder="Nhập xác thực mật khẩu" 
+                        icon="fa-lock"
+                    />
                     <div class="row mb-3">
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary btn-block">

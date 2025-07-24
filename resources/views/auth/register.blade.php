@@ -19,110 +19,69 @@
         <div class="register-logo">
             <a href="#"><b>Admin</b>LTE</a>
         </div>
-
         <div class="card">
             <div class="card-body register-card-body">
                 <p class="login-box-msg">Register a new membership</p>
-
                 <form method="POST" action="{{ route('auth.register.post') }}">
                     @csrf
-                    <div class="form-group">
-                        <label for="first_name">First Name <span class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control @error('first_name') is-invalid @enderror"
-                                name="first_name" id="first_name" placeholder="First name"
-                                value="{{ old('first_name') }}">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-user"></span>
-                                </div>
-                            </div>
-                            @error('first_name')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
+                    <x-form-input 
+                        label="Họ" 
+                        name="first_name" 
+                        type="text" 
+                        :value="old('first_name')" 
+                        :is-required="true" 
+                        :is-login="true" 
+                        placeholder="Nhập Họ" 
+                        icon="fas fa-user"
+                    />
 
-                    <div class="form-group">
-                        <label for="last_name">Last Name <span class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control @error('last_name') is-invalid @enderror"
-                                name="last_name" id="last_name" placeholder="Last name" value="{{ old('last_name') }}">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-user"></span>
-                                </div>
-                            </div>
-                            @error('last_name')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
+                    <x-form-input 
+                        label="Tên" 
+                        name="last_name" 
+                        type="text" 
+                        :value="old('last_name')" 
+                        :is-required="true" 
+                        :is-login="true" 
+                        placeholder="Nhập Tên" 
+                        icon="fas fa-user"
+                    />
 
-                    <div class="form-group">
-                        <label for="email">Email <span class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control @error('email') is-invalid @enderror"
-                                name="email" id="email" placeholder="Email" value="{{ old('email') }}">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-envelope"></span>
-                                </div>
-                            </div>
-                            @error('email')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-                    </div>
+                    <x-form-input 
+                        label="Email" 
+                        name="email" 
+                        type="text" 
+                        :value="old('email')" 
+                        :is-required="true" 
+                        :is-login="true" 
+                        placeholder="Nhập email" 
+                        icon="fa-envelope"
+                    />
 
-                    <div class="form-group">
-                        <label for="password">Password <span class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="password" id="password"
-                                class="form-control @error('password') is-invalid @enderror" name="password"
-                                placeholder="Password">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-lock"></span>
-                                </div>
-                            </div>
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
+                    <x-form-input 
+                        label="Mật khẩu" 
+                        name="password" 
+                        type="password" 
+                        :is-required="true" 
+                        :is-login="true" 
+                        placeholder="Nhập mật khẩu" 
+                        icon="fa-lock"
+                    />
 
-                    <div class="form-group">
-                        <label for="password_confirmation">Password Confirmation <span
-                                class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="password" id="password_confirmation"
-                                class="form-control @error('password_confirmation') is-invalid @enderror"
-                                name="password_confirmation" placeholder="Confirm Password">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-lock"></span>
-                                </div>
-                            </div>
-                            @error('password_confirmation')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
+                    <x-form-input 
+                        label="Xác nhận mật khẩu" 
+                        name="password_confirmation" 
+                        type="password" 
+                        :is-required="true" 
+                        :is-login="true" 
+                        placeholder="Nhập xác thực mật khẩu" 
+                        icon="fa-lock"
+                    />
                     <div class="row">
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary btn-block">Register</button>
                         </div>
                     </div>
                 </form>
-
                 <div class="text-center mt-4">
                     <a href="{{ route('auth.login') }}" class="btn btn-outline-primary btn-block">
                         <i class="fas fa-sign-in-alt mr-2"></i>

@@ -1,16 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\AdminPostController;
-use App\Http\Controllers\AdminUserController;
-use App\Http\Controllers\PostCommentController;
-use App\Http\Controllers\PostLikeController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\User\PostController as UserPostController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\UserController as AdminUserContoller;
+use App\Http\Controllers\Post\CommentController;
+use App\Http\Controllers\Post\LikeController;
+use App\Http\Controllers\New\NewController;
 
-Route::get('/', function () {
-    return redirect()->route('auth.login');
-});
+Route::get('/', [NewController::class, 'news'])->name('news');
 
 Route::group(['prefix' => 'auth', 'middleware' => 'guest'], function () {
     //Register
@@ -31,40 +30,41 @@ Route::group(['prefix' => 'auth', 'middleware' => 'guest'], function () {
 
 Route::group(['middleware' => ['auth', 'check.user.status', 'role:user']], function () {
     //Post
-    Route::delete('/post/delete-all', [PostController::class, 'deleteAll']);
-    Route::get('/post/data', [PostController::class, 'data']);
-    Route::resource('post', PostController::class);
+    Route::delete('/post/delete-all', [UserPostController::class, 'deleteAll'])->name('post.delete_all');
+    Route::get('/post/data', [UserPostController::class, 'data'])->name('post.data');
+    Route::resource('post', UserPostController::class);
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'check.user.status', 'role:admin']], function () {
     //Manage Post
-    Route::delete('/post/delete-all', [AdminPostController::class, 'adminDeleteAll']);
-    Route::get('/post/data', [AdminPostController::class, 'data']);
+    Route::delete('/post/delete-all', [AdminPostController::class, 'adminDeleteAll'])->name('admin.post.delete_all');
+    Route::get('/post/data', [AdminPostController::class, 'data'])->name('admin.post.data');
     Route::resource('/post', AdminPostController::class)->names('admin.post');
 
     //Manage User
-    Route::get('/user/data', [AdminUserController::class, 'data']);
-    Route::put('/user/{user}/toggle-lock', [AdminUserController::class, 'statusUser']);
-    Route::resource('/user', AdminUserController::class)->names('admin.user');
+    Route::get('/user/data', [AdminUserContoller::class, 'data'])->name('admin.user.data');
+    Route::put('/user/{user}/toggle-lock', [AdminUserContoller::class, 'statusUser'])->name('admin.user.toggle_lock');
+    Route::resource('/user', AdminUserContoller::class)->names('admin.user');
 });
 
 Route::middleware(['auth', 'check.user.status'])->group(function () {
-    //News
-    Route::get('/news', [PostController::class, 'news'])->name('post.news');
-    Route::get('/news/{post:slug}', [PostController::class, 'newsDetail'])->name('post.news_detail');
-
     // Comment
-    Route::post('/news/{post}/comment', [PostCommentController::class, 'store'])->name('comment.store');
-    Route::delete('/comment/{comment}', [PostCommentController::class, 'destroy'])->name('comment.destroy');
+    Route::post('/news/{post}/comment', [CommentController::class, 'store'])->name('comment.store');
+    Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
 
     // Like
-    Route::post('/news/{post}/like', [PostLikeController::class, 'store'])->name('like.store');
-    Route::delete('/news/{post}/unlike', [PostLikeController::class, 'destroy'])->name('like.destroy');
+    Route::post('/news/{post}/like', [LikeController::class, 'store'])->name('like.store');
+    Route::delete('/news/{post}/unlike', [LikeController::class, 'destroy'])->name('like.destroy');
 
     //Profile
     Route::get('/profile', [AuthController::class, 'showProfile'])->name('profile.show');
     Route::post('/profile/update', [AuthController::class, 'updateProfile'])->name('profile.update');
 });
 
+//News
+Route::get('/news', [NewController::class, 'news'])->name('news');
+Route::get('/news/{post:slug}', [NewController::class, 'newsDetail'])->name('news.detail');
+
+//Auth
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::get('/auth/reset-password/{token}', [AuthController::class, 'showResetPassword'])->name('auth.reset_password.show');

@@ -10,49 +10,34 @@
                             <div class="tab-pane">
                                 <form class="form-horizontal" method="POST" action="{{ route('profile.update') }}">
                                     @csrf
-                                    <div class="form-group">
-                                        <label for="first_name">First Name <span class="text-danger">*</span></label>
-                                        <div class="input-group mb-3">
-                                            <input type="text" id="first_name"
-                                                class="form-control @error('first_name') is-invalid @enderror"
-                                                name="first_name" placeholder="First Name"
-                                                value="{{ old('first_name', $user->first_name) }}">
-                                            @error('first_name')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="last_name">Last Name <span class="text-danger">*</span></label>
-                                        <div class="input-group mb-3">
-                                            <input type="text" id="last_name"
-                                                class="form-control @error('last_name') is-invalid @enderror"
-                                                name="last_name" placeholder="Last Name"
-                                                value="{{ old('last_name', $user->last_name) }}">
-                                            @error('last_name')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="address">Address</label>
-                                        <div class="input-group mb-3">
-                                            <input type="text" id="address"
-                                                class="form-control @error('address') is-invalid @enderror" name="address"
-                                                placeholder="Address" value="{{ old('address', $user->address) }}">
-                                            @error('address')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
+                                    <x-form-input 
+                                        label="Họ" 
+                                        name="first_name" 
+                                        :is-required="true" 
+                                        :value="$user->first_name"
+                                    />
+
+                                    <x-form-input 
+                                        label="Tên" 
+                                        name="last_name" 
+                                        :is-required="true" 
+                                        :value="$user->last_name"
+                                    />
+
+                                    <x-form-input 
+                                        label="Địa chỉ" 
+                                        name="address" 
+                                        :is-required="false" 
+                                        :value="$user->address"
+                                    />
                                     <div class="text-center mt-4">
                                         <button type="submit" class="btn btn-primary px-4">
                                             <i class="fas fa-user-edit mr-2"></i>Chỉnh sửa hồ sơ
                                         </button>
                                         @can('adminAccess', Auth::user())
-                                            <a class="btn btn-secondary" href="{{ route('admin.post.index') }}">Đóng</a>
+                                            <a class="btn btn-secondary" href="{{ route('admin.user.index') }}">Đóng</a>
                                         @else
-                                            <a class="btn btn-secondary" href="{{ route('post.news') }}">Đóng</a>
+                                            <a class="btn btn-secondary" href="{{ route('post.index') }}">Đóng</a>
                                         @endcan
                                     </div>
                                 </form>

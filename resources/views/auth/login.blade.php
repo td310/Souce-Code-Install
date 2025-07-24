@@ -20,7 +20,6 @@
         <div class="register-logo">
             <a href="#"><b>Admin</b>LTE</a>
         </div>
-
         <div class="card">
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
@@ -31,53 +30,36 @@
                 @endif
                 <form method="POST" action="{{ route('auth.login.post') }}">
                     @csrf
-                    <div class="form-group">
-                        <label for="email">Email <span class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="text" id="email"
-                                class="form-control @error('email') is-invalid @enderror" name="email"
-                                placeholder="Email" value="{{ old('email') }}">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-envelope"></span>
-                                </div>
-                            </div>
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password">Password <span class="text-danger">*</span></label>
-                        <div class="input-group mb-3">
-                            <input type="password" id="password"
-                                class="form-control @error('password') is-invalid @enderror" name="password"
-                                placeholder="Password">
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-lock"></span>
-                                </div>
-                            </div>
-                            @error('password')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
+                    <x-form-input 
+                        label="Email" 
+                        name="email" 
+                        type="text" 
+                        :value="old('email')" 
+                        :is-required="true" 
+                        :is-login="true" 
+                        placeholder="Email" 
+                        icon="fa-envelope"
+                    />
+                    <x-form-input 
+                        label="Password" 
+                        name="password" 
+                        type="password" 
+                        :is-required="true" 
+                        :is-login="true" 
+                        placeholder="Password" 
+                        icon="fa-lock"
+                    />
                     <div class="row mb-3">
                         <div class="col-8">
                             <a href="{{ route('auth.forgot_password') }}" class="text-primary">Forgot Password?</a>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                         </div>
                     </div>
                 </form>
-
                 <div class="text-center mt-4">
                     <a href="{{ route('auth.register') }}" class="btn btn-outline-primary btn-block">
                         <i class="fas fa-user-plus mr-2"></i>
@@ -87,7 +69,6 @@
             </div>
         </div>
     </div>
-    <!-- /.register-box -->
     @if (session('success'))
         <script>
             alert('{{ session('success') }}');

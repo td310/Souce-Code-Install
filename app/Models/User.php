@@ -58,11 +58,11 @@ class User extends Authenticatable
 
     public function comments()
     {
-        return $this->hasMany(PostComment::class);
+        return $this->morphMany(PostComment::class, 'commentable');
     }
 
     public function likes()
     {
-        return $this->hasMany(PostLike::class);
+        return $this->morphMany(PostLike::class, 'likeable');
     }
 }

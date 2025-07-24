@@ -29,8 +29,8 @@ class PostFactory extends Factory
             $localImagePath = storage_path('app/public/3/per3.jpg');
             if (file_exists($localImagePath)) {
                 $post->addMedia($localImagePath)
-                    ->preservingOriginal()
-                    ->toMediaCollection('thumbnail');
+                ->preservingOriginal()
+                ->toMediaCollection('thumbnail');
             }
         });
     }
