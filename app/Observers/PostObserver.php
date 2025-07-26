@@ -8,32 +8,27 @@ use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
 
 class PostObserver implements ShouldHandleEventsAfterCommit
 {
-    /**
-     * Handle the User "created" event.
+/**
+     * Handle the Post "created" event.
      */
     public function created(Post $post): void
     {
         if (!$post->slug) {
-            $slug = Str::slug($post->title);
-            $hashSlug = substr(md5(uniqid($slug, true)), 0, 6);
-            $post->slug = "{$slug}-{$hashSlug}";
+            $post->slug = generate_unique_slug($post->title);
             $post->saveQuietly();
         }
     }
 
     /**
-     * Handle the User "updated" event.
+     * Handle the Post "updated" event.
      */
     public function updated(Post $post): void
     {
         if ($post->isDirty('title') && $post->slug) {
-            $slug = Str::slug($post->title);
-            $hashSlug = substr(md5(uniqid($slug, true)), 0, 6);
-            $post->slug = "{$slug}-{$hashSlug}";
+            $post->slug = generate_unique_slug($post->title);
             $post->saveQuietly();
         }
     }
-
     /**
      * Handle the User "deleted" event.
      */
