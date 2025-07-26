@@ -26,4 +26,10 @@ class CommentController extends Controller
     {
         return response()->json($this->commentService->destroyComment($comment));
     }
+
+    public function dataComment(Post $post)
+    {
+        $comments = $this->commentService->getComments($post);
+        return response()->json($comments->toArray(request()));
+    }
 }

@@ -20,4 +20,14 @@ class PostComment extends Model
     {
         return $this->morphTo();
     }
+
+    public function children()
+    {
+        return $this->hasMany(PostComment::class, 'parent_id')->with('children', 'user');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(PostComment::class, 'parent_id');
+    }
 }

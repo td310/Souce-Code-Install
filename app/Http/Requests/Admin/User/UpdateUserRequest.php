@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\Admin\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Enums\AuthStatus;
 use Illuminate\Validation\Rule;
 
-class UserUpdateRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     public function authorize(): bool
     {

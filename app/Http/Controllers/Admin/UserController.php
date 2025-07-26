@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\Admin\UserCreateRequest;
-use App\Http\Requests\Admin\UserUpdateRequest;
+use App\Http\Requests\Admin\User\StoreUserRequest;
+use App\Http\Requests\Admin\User\UpdateUserRequest;
 use App\Services\Admin\UserService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -33,7 +33,7 @@ class UserController extends Controller
         return view('admin.admin_user.create');
     }
 
-    public function store(UserCreateRequest $request)
+    public function store(StoreUserRequest $request)
     {
         return $this->adminUserService->adminCreateUser($request->validated())
             ? to_route('admin.user.index')->with('success', 'Tạo người dùng thành công.')
@@ -50,7 +50,7 @@ class UserController extends Controller
         return view('admin.admin_user.edit', compact('user'));
     }
 
-    public function update(UserUpdateRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         return $this->adminUserService->adminUpdateUser($user, $request->validated())
             ? to_route('admin.user.index')->with('success', 'Cập nhật người dùng thành công.')

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\Services\User\PostService;
-use App\Http\Requests\User\PostRequest;
+use App\Http\Requests\User\Post\StorePostRequest;
+use App\Http\Requests\User\Post\UpdatePostRequest;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -34,7 +35,7 @@ class PostController extends Controller
         return view('post.create');
     }
 
-    public function store(PostRequest $request)
+    public function store(StorePostRequest $request)
     {
         return $this->postService->createPost($request->validated())
             ? to_route('post.index')->with('success', 'Tạo bài viết thành công')
@@ -54,7 +55,7 @@ class PostController extends Controller
         return view('post.edit', compact('post'));
     }
 
-    public function update(PostRequest $request, Post $post)
+    public function update(UpdatePostRequest $request, Post $post)
     {
         return $this->postService->updatePost($post, $request->validated())
             ? to_route('post.index')->with('success', 'Cập nhật bài viết thành công')

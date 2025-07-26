@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Admin\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use App\Enums\PostStatus;
 
-class PostRequest extends FormRequest
+class UpdatePostRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,6 +21,7 @@ class PostRequest extends FormRequest
             'content' => ['required', 'string'],
             'publish_date' => ['required', 'date', 'after_or_equal:today'],
             'file' => ['nullable', 'file', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'],
+            'status' => ['nullable', Rule::enum(PostStatus::class)],
         ];
     }
 
@@ -38,7 +41,7 @@ class PostRequest extends FormRequest
 
             'file.file' => 'Trường :attribute phải là một tệp.',
             'file.mimes' => 'Trường :attribute phải là một tệp có định dạng: :values.',
-            'file.max' => 'Trường :attribute không được vượt quá :max kilobytes.'
+            'file.max' => 'Trường :attribute không được vượt quá :max kilobytes.',
         ];
     }
 
@@ -49,7 +52,8 @@ class PostRequest extends FormRequest
             'description'  => 'mô tả ngắn',
             'content' => 'nội dung bài viết',
             'publish_date' => 'ngày xuất bản',
-            'file' => 'hình ảnh'
+            'file' => 'hình ảnh',
         ];
     }
 }
+

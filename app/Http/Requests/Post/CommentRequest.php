@@ -14,7 +14,8 @@ class CommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'content' => 'required|string',
+            'content' => ['required' , 'string'],
+            'parent_id' => ['nullable', 'exists:post_comments,id']
         ];
     }
 

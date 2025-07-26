@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\User\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use App\Enums\PostStatus;
 
-class PostRequest extends FormRequest
+class UpdatePostRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -21,7 +19,6 @@ class PostRequest extends FormRequest
             'content' => ['required', 'string'],
             'publish_date' => ['required', 'date', 'after_or_equal:today'],
             'file' => ['nullable', 'file', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'],
-            'status' => ['nullable', Rule::enum(PostStatus::class)],
         ];
     }
 
@@ -56,3 +53,4 @@ class PostRequest extends FormRequest
         ];
     }
 }
+

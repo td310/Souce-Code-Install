@@ -51,6 +51,7 @@ Route::middleware(['auth', 'check.user.status'])->group(function () {
     // Comment
     Route::post('/news/{post}/comment', [CommentController::class, 'store'])->name('comment.store');
     Route::delete('/comment/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
+    Route::get('/news/{post}/comments', [CommentController::class, 'dataComment'])->name('comment.data_comment');
 
     // Like
     Route::post('/news/{post}/like', [LikeController::class, 'store'])->name('like.store');

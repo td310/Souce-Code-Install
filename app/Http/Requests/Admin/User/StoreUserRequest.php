@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Admin;
+namespace App\Http\Requests\Admin\User;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rule;
 use App\Enums\AuthStatus;
 
-class UserCreateRequest extends FormRequest
+class StoreUserRequest extends FormRequest
 {
     public function authorize(): bool
     {

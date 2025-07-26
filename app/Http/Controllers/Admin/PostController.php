@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Services\Admin\PostService;
-use App\Http\Requests\Admin\PostRequest;
+use App\Http\Requests\Admin\Post\StorePostRequest;
+use App\Http\Requests\Admin\Post\UpdatePostRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
@@ -32,7 +33,7 @@ class PostController extends Controller
         return view('admin.admin_post.create');
     }
 
-    public function store(PostRequest $request)
+    public function store(StorePostRequest $request)
     {
         return $this->adminPostService->adminCreatePost($request->validated())
         ? to_route('admin.post.index')->with('success', 'Tạo bài viết thành công')
@@ -49,7 +50,7 @@ class PostController extends Controller
         return view ('admin.admin_post.edit', compact('post'));
     }
 
-    public function update(PostRequest $request, Post $post)
+    public function update(UpdatePostRequest $request, Post $post)
     {
         return $this->adminPostService->adminUpdatePost($post, $request->validated())
             ? to_route('admin.post.index')->with('success', 'Cập nhật bài viết thành công')
