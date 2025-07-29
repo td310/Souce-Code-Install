@@ -14,7 +14,7 @@ class PostObserver implements ShouldHandleEventsAfterCommit
     public function created(Post $post): void
     {
         if (!$post->slug) {
-            $post->slug = generate_unique_slug($post->title);
+            $post->slug = UniqueSlug($post->title);
             $post->saveQuietly();
         }
     }
@@ -25,7 +25,7 @@ class PostObserver implements ShouldHandleEventsAfterCommit
     public function updated(Post $post): void
     {
         if ($post->isDirty('title') && $post->slug) {
-            $post->slug = generate_unique_slug($post->title);
+            $post->slug = UniqueSlug($post->title);
             $post->saveQuietly();
         }
     }

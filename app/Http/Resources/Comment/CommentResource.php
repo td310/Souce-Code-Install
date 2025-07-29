@@ -19,7 +19,7 @@ class CommentResource extends JsonResource
             'id' => $this->id,
             'content' => $this->content,
             'user_name' => $this->user->name,
-            'created_at' => format_datetime($this->created_at),
+            'created_at' => FormatDateTime($this->created_at),
             'can_delete' => Auth::id() === $this->user_id,
             'parent_id' => $this->parent_id,
             'children' => CommentResource::collection($this->whenLoaded('children')),
